@@ -1,0 +1,382 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 2. v2.0 | 20110126
+  License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  /*
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  */
+}
+/* HTML5 display-role reset for older browsers */
+/*
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+*/
+
+/* reset default */
+ul {
+  list-style: none;
+}
+
+/* my page style definition */
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: 'Microsoft JhengHei';
+}
+body {
+  background-color: lightyellow;
+  line-height: 1.5;
+}
+h2 {
+  margin: 5px 0;
+}
+.titleBlock {
+  height: 20vh;
+  color: white;
+  text-align: center;
+  background-color: #246A24;
+  background-image: 
+    url("../images/book1.png"), url("../images/book2.png"), 
+    url("../images/pencan.png"), url("../images/wood\ pattern.jpeg");
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  /*background-attachment: fixed, fixed, fixed, fixed;*/
+  background-position: 21vw 13vh, 3vw 8vh, 85vw 3vh, left top;
+  background-size: 15vh, 15vh, 10vh, cover;
+  /*border-bottom: 10px solid lightsteelblue;*/
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.mainBlock {
+  height: 80vh;
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+  background-image: url("../images/plantLine2.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 0 19vh;
+  background-size: 100vw;
+  overflow: hidden;
+}
+/*
+.footBlock {
+  height: 10vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+*/
+.leftSide {
+  display: block;
+  width: 20%;
+  padding-top: 18vh;
+  overflow: auto;
+  scrollbar-width: none;
+  background-image: url("../images/paper.png"), url("../images/brand-1.png");
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: fixed, fixed;
+  background-position: 0.5vw 37vh, 0 31vh;
+  background-size: 18vw 28vh, 20vw 63vh;
+}
+.mainArea {
+  width: 60%;
+  /*padding-top: 5vh;*/
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  /*border: 1px solid green;*/
+}
+.rightSide {
+  width: 20%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+#img_ID {
+  max-height: 100%;  
+  max-width: 100%;   
+}
+::-webkit-scrollbar {
+  width: none;
+}
+.button {
+  width: 100%;
+  /*display: block;*/
+  border: none;
+  margin: 0 center;
+  outline: none;
+  background-color: transparent;
+  /*box-shadow: 10px 10px 10px #999;*/
+  padding: 5px 5px;
+  font-size: 2.8vmin;
+  font-weight: bold;
+  color: brown;
+  cursor: pointer;
+}
+.button:hover { 
+  font-size: 1.8em;
+  color: green; 
+}
+.button:active {
+  color: greenyellow;
+  transform: translateY(5px);
+}
+.pullLeft {
+  position: absolute;
+  left: 20%;
+  top: 36%;
+  animation-name: sideOptions;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  display: none;
+  width: 27vw;
+  height: 55vh;
+  padding-top: 5vh;
+  /*background-color: lightskyblue;*/
+  /*border: 0.5vw solid darkred;*/
+  background-image: url("../images/magnifyingGlass.png"), url("../images/paper.png");
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: fixed, fixed;
+  background-size: 20vw 30vh, 21vw 40vh;
+  /*transform-origin: left;*/
+}
+@keyframes sideOptions {
+  0% {background-position: 0 35vh, 0 36vh; left: 0; opacity: 0;}
+  25% {background-position: 6vw 35vh, 5vw 36vh; left: 5vw; opacity: 1;}
+  50% {background-position: 12vw 35vh, 10vw 36vh; left: 10vw;}
+  75% {background-position: 18vw 35vh, 15vw 36vh; left: 15vw;}
+  100% {background-position: 23.5vw 35vh, 20vw 36vh; left: 20vw;}
+}
+.pullLeft .button {
+  width: 22vw;
+}
+.contentCeil {
+  display: none;
+  width: 80%;
+  border: 1px solid lightgoldenrodyellow;
+  border-radius: 25px;
+  box-shadow: 7px 7px 0 #8F4C09;
+  padding: 20px 30px;
+  margin: 10px 0;
+  background-color: #F7EBD8;
+}
+#homePageContent {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  /*flex-wrap: wrap;*/
+  /*border: 1px solid black;*/
+}
+#slideTip {
+  display: none;
+  width: 5%;
+}
+.slideDir {
+  width: 3vw;
+  height: 7vh;
+  position: relative;
+  left: 0;
+  top: 80%;
+  animation: pointerMove 4s linear infinite, rotatePic1 4s linear forwards infinite, rotatePic2 4s linear forwards infinite;
+}
+@keyframes pointerMove {
+  0% {top: 80%;}
+  50% {top: 10%;}
+  100% {top: 80%;}
+}
+@keyframes rotatePic1 {
+  0% {transform: rotate(0deg);}
+  2.5% {transform: rotate(180deg);}
+  100% {transform: rotate(180deg);}
+}
+@keyframes rotatePic2 {
+  0% {transform: rotate(180deg);}
+  50% {transform: rotate(180deg);}
+  52.5% {transform: rotate(0deg);}
+  100% {transform: rotate(0deg);}
+}
+.addComment {
+  display: none;
+  width: 100%;
+  position: absolute;
+  left: 25%;
+  top: 10px;
+}
+.warning {
+  color: red;
+  font-weight: bold;
+}
+ul li::before {
+  content: '✏️'; 
+  padding-right: 8px;
+}
+li.warning::before {
+  content: '⚠️';
+}
+a {
+  text-decoration: none;
+  font-size: inherit;
+  color: inherit;
+  text-align: center;
+}
+
+.profilePic {
+  width: 120px;
+  height: 120px;
+  background-color: lightgoldenrodyellow;
+  background-image: url("../images/dui.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  border-top: 8px outset rgb(235, 174, 42);
+  border-left: 8px outset rgb(235, 174, 42);
+  border-right: 8px outset rgb(73, 50, 15);
+  border-bottom: 8px outset rgb(73, 50, 15);
+}
+
+.profilePic:active {
+  border: 3px solid black;
+}
+
+.imgUpload {
+  display: block;
+  height: 120px;
+  text-align: center;
+  line-height: 320px;
+  cursor: pointer;
+  /*border: 1px solid black;*/
+}
+
+input[type="file"] {
+  /*隱藏 瀏覽 按鈕*/
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+fieldset {
+  margin: 5px auto;
+  padding: 5px 25px;
+  position: relative;
+}
+
+legend {
+  font-size: 20px;
+  font-style: italic;
+  font-weight: bold;
+  padding: 0;
+  background-color: transparent;
+}
+
+#iconTitle {
+  position: absolute;
+  left: -50px;
+  top: 20px;
+}
+
+:required + span::before {
+  position: absolute;
+  right: -25px;
+  bottom: 5px;
+  content: '';
+}
+
+.modified:required:valid + span::before {
+  color: green;
+  content: '✓';
+  font-size: 25px;
+}
+
+.modified:required:invalid + span::before {
+  content: '✖';
+  color: red;
+  font-size: 20px;
+}
+
+.fieldName {
+  background-color:#ffb84d;
+  font-weight:bold;
+}
+
+.disableField {
+  background-color:gray;
+  color: white;
+}
+
+.regBackPic {
+  background-image: url("../images/oldPaper.png");
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: 100% 100%;
+}
+
+#stamp {
+  display: none;
+  width: 200px;
+  position: absolute;
+  left: 30%;
+  top: 70%;
+  animation: stamp 0.2s linear forwards;
+}
+@keyframes stamp {
+  0% {left: 30%; top: 70%;}
+  50% {left: 38%; top: 62%}
+  100% {left: 48%; top: 55%;}
+}

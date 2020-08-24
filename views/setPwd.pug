@@ -1,0 +1,50 @@
+extends layout
+
+block main
+  div.contentCeil(style='display:block; width:60%;')
+    h3.mb-3 密碼設置 🗝
+    if errors
+      .alert.alert-danger
+        each err in errors
+          p ⚠️ #{err.msg}
+    form(action='/resetPwd' method='post')
+      input(type='hidden' name='_csrf' value=csrfToken)
+      input(type='hidden' name='authKey' value=authKey)
+      .input-group.mb-3.input-group-lg
+        .input-group-prepend
+          label.input-group-text.fieldName(for='pwd') 登入密碼 
+        input.form-control#pwd(
+          type="password" 
+          name="pwd" 
+          pattern="[a-z A-Z 0-9]{8,30}" 
+          data-toggle="tooltip"
+          title="請填入8~30位英文/數字組合"
+          onfocus="this.value=''"
+          required
+        )
+      .input-group.mb-3.input-group-lg
+        .input-group-prepend
+          label.input-group-text.fieldName#confTitle(for='confirmPwd') 密碼確認 
+        input.form-control#confirmPwd(
+          type="password" 
+          name="confirmPwd"
+          data-toggle="tooltip"
+          title="請填入與密碼欄位相同的值"
+          onfocus="this.value=''"
+          required
+        )
+      .form-group.mb-3.text-right
+        button.btn.btn-success.mb-1(type='submit') 送出
+  script.
+    $(document).ready(function(){
+      // input欄位mask設置(排除規則外字符輸入)
+      $('#pwd').inputmask({"mask": "*{0,30}"});
+      $('#confirmPwd').inputmask({"mask": "*{0,30}"});
+      // 顯示欄位提示
+      $('[data-toggle="tooltip"]').tooltip({placement: "right", trigger: "hover focus"});
+      
+      $('#confirmPwd').prop('disabled', 'true');
+      $('#confTitle').toggleClass('disableField');
+      $('#pwd').on('blur', unlockCPW);
+      $("#confirmPwd").on('focus', setCpwPattern);
+    });

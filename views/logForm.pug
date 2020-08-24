@@ -1,0 +1,30 @@
+extends layout
+
+block main
+  div.contentCeil(style='display:block; width:60%;')
+    h3.mb-3 貓員登入 🚪 🗝
+    if success.toString()
+      .alert.alert-success #{success}
+    if failure.toString()
+      .alert.alert-danger ⚠️ #{failure}
+    form(action='/login' method='post')
+      input(type='hidden' name='_csrf' value=csrfToken)
+      .input-group.mb-3.input-group-lg
+        .input-group-prepend
+          label.input-group-text.fieldName(for='username') 貓員名稱 
+        input.form-control(type="text" name='username' id='username' required)
+      .input-group.mb-3.input-group-lg
+        .input-group-prepend
+          label.input-group-text.fieldName(for='password') 登入密碼 
+        input.form-control(type="password" name='password' id='password' required)
+      .form-group.mb-3.text-right
+        span.mr-1 想成為貓員?? 
+        a.btn.btn-primary.mr-3.mb-1(href='/register') 註冊
+        a.btn.btn-danger.mr-3.mb-1(href='/resetPwd') 忘記密碼
+        button.btn.btn-success.mb-1(type='submit') 登入
+  script.
+    $(document).ready(function(){
+      // input欄位mask設置(排除規則外字符輸入)
+      $('#username').inputmask({"mask": "*{5,10}"});
+      $('#password').inputmask({"mask": "*{0,30}"});
+    });

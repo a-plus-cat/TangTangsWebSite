@@ -1,0 +1,124 @@
+extends layout
+
+block main
+  .regBackPic
+    - const url = `?_csrf=${csrfToken}`
+    form.d-flex.flex-column.mt-5.mx-5(
+      name="userData"
+      action=url
+      method="post"
+      enctype="multipart/form-data" 
+      id="userData"
+    )
+      //- input(type='hidden' name='_csrf' value=`${csrfToken}`)
+      fieldset.mb-1
+        legend#iconTitle 🗂  貓員頭像
+        .profilePic#picBlock.mt-5
+          label.imgUpload#picLabel(for="userIcon" title="點擊上傳頭像")
+          input#userIcon(
+            type="file" 
+            name="userIcon"
+            accept="image/*" 
+            onchange="readURL(this)"
+            required
+          )
+      fieldset.mb-3
+        legend 🗂 貓員資料
+        .input-group.mb-2
+          .input-group-prepend
+            label.input-group-text.fieldName(for="name") 貓員稱呼
+          input.form-control#name(
+            type="text" 
+            name="name" 
+            pattern="^[a-z A-Z 0-9]{5,10}"
+            data-toggle="tooltip"
+            title="請填入5~10位英文/數字組合"
+            value=(member===undefined ? '' : member.name) 
+            onfocus="this.value=''"
+            required
+          )
+          span
+        .input-group.mb-2
+          .input-group-prepend
+            label.input-group-text.fieldName(for="email") 貓員信箱
+          input.form-control#email(
+            type="email"
+            name="email"
+            data-toggle="tooltip"
+            title="請填入可使用信箱位址"
+            value=(member===undefined ? '' : member.email)
+            onfocus="this.value=''"
+            required
+          )
+          span
+        .input-group.mb-2
+          .input-group-prepend
+            label.input-group-text.fieldName(for="pwd") 登入密碼
+          input.form-control#pwd(
+            type="password" 
+            name="pwd" 
+            pattern="[a-z A-Z 0-9]{8,30}" 
+            data-toggle="tooltip"
+            title="請填入8~30位英文/數字組合"
+            value=(member===undefined ? '' : member.pwd) 
+            onfocus="this.value=''"
+            required
+          )
+          span
+        .input-group
+          .input-group-prepend
+            label.input-group-text.fieldName#confTitle(for="confirmPwd") 密碼確認  
+          input.form-control#confirmPwd(
+            type="password" 
+            name="confirmPwd"
+            data-toggle="tooltip"
+            title="請填入與密碼欄位相同的值"
+            value=(member===undefined ? '' : member.confirmPwd)
+            onfocus="this.value=''"
+            required
+          )
+          span
+      .mb-3.text-right    
+        button#confirmBtn.btn.btn-danger.mb-1(type="button" onclick="stampAni()") 傳送資料
+      img#stamp(src="/images/stamp.png" alt="確認傳送資料")
+  .modal.fade#notice
+    .modal-dialog.modal-dialog-centered
+      .modal-content
+        .modal-header
+          h3.modal-title Tang-Tang の 小提醒
+        .modal-body
+          if errors
+            each err in errors
+              p #{err.msg}
+          else 
+            p(style="font-family: 'Microsoft JhengHei';") 
+              | 所有欄位皆為
+              span.font-weight-bold.text-danger 必填
+              | 喔!!
+        .modal-footer
+          button.btn.btn-primary(type='button' data-dismiss='modal') Close
+  script.
+    $(document).ready(function(){
+      // 重置表格
+      // const form = $('form').get(0);
+      // form.reset();
+      $("#notice").modal("show");
+      // input欄位mask設置(排除規則外字符輸入)
+      $('#name').inputmask({"mask": "*{5,10}"});
+      $('#pwd').inputmask({"mask": "*{0,30}"});
+      $('#confirmPwd').inputmask({"mask": "*{0,30}"});
+
+      // 顯示欄位提示
+      $('#picLabel').tooltip({placement: "right", trigger: "hover"});
+      $('[data-toggle="tooltip"]').tooltip({placement: "right", trigger: "focus"});
+
+      $('#confirmPwd').prop('disabled', 'true');
+      $('#confTitle').toggleClass('disableField');
+
+      // input第一次觸發事件時加入class
+      $(':required').one('blur keydown', function() {
+        $(this).addClass('modified');
+      });
+      $('#pwd').on('blur', unlockCPW);
+      $("#confirmPwd").on('focus', setCpwPattern);
+    });

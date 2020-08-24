@@ -1,0 +1,90 @@
+doctype html
+html
+  head
+    title= title
+    meta(charset='utf-8')
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css")
+    link(rel='stylesheet', href='/stylesheets/main.css')
+    link(rel="shortcut icon" href="#")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.5/jquery.inputmask.min.js")
+    script(src="/javascripts/main.js")
+  body(onresize="resetMap()" onload='currentTime()')
+    //- 頁面標頭區塊
+    header.titleBlock
+      h2(style='font-size:2.5vw') Tang-Tang's record
+      h4(style='font-size:1.5vw') 🐱 Join to our family in April 20 2019 🐱
+    //- 頁面主體區塊
+    div.mainBlock
+      //- reuse block declaration
+      mixin showArticle(titles)
+        each e in titles
+          button.button(onmouseover="moveGlass(event)" onclick=`showContent(${e})`)= e
+        button.button(onclick="listClose(event)" onmouseover="moveGlass(event)") back
+      //- 左側功能連結區
+      case currentPage
+        when '/'
+        when '/resetPwd'
+        when '/setPwd'
+          div(style='width:20%;position:relative;')
+            //- img(src='images/blackCat.gif' alt='HelloCat' width='300px' style='position:absolute;left:-10px;top:30%;')
+        when '/forum'
+          aside.leftSide
+            button#title1.button(onclick='listOpen(event)') 貓員留言板
+            div#list1.pullLeft
+              +showArticle(['行為相關', '健康相關', '食物偏好', '娛樂推薦'])
+            button#title2.button 糖糖日記
+            button#title3.button 糖糖相簿
+            button#title4.button(onclick='listOpen(event)') 相關連結
+            div#list4.pullLeft
+              +showArticle(['使用資源', '實用連結', '站主聯繫'])
+        when '/login'  
+        when '/register'
+          div(style='width:20%;position:relative;')
+            img(src='images/helloCat.gif' alt='HelloCat' width='100%' style='position:absolute;left:20px;top:30%;')
+      //- 中間頁面主體區
+      div.mainArea
+        block main
+      //- 右側功能連結區
+      div.rightSide
+        img#img_ID(
+          src='/images/maptree.png'
+          alt='功能清單'
+          usemap='#funcGuide'
+          onload='resetMap()'
+        )
+        map#map_ID(name='funcGuide')
+          area(
+            alt="發表文章" 
+            title="發表文章" 
+            href="" 
+            coords="59,190,161,260" 
+            shape="rect"
+          )
+          - const route = member ? '/logout' : '/login';
+          area(
+            alt="登入/登出"
+            title="登入/登出"
+            href=route
+            coords="175,414,255,496"
+            shape="rect"
+          )
+          area(
+            alt="相關連結"
+            title="相關連結"
+            href=""
+            coords="240,147,46"
+            shape="circle"
+          ) 
+          area(
+            alt="文章"
+            title="文章"
+            href='/forum'
+            coords="95,428,40"
+            shape="circle"
+          )
+
+    //- block content

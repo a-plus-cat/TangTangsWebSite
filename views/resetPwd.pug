@@ -1,0 +1,31 @@
+extends layout
+
+block main
+  div.contentCeil(style='display:block; width:60%;')
+    h3.mb-3 重設密碼 🗝
+    if errors
+      .alert.alert-danger
+        each err in errors
+          p ⚠️ #{err.msg}
+    form(action='/resetPwd' method='post')
+      input(type='hidden' name='_csrf' value=csrfToken)
+      .input-group.mb-3.input-group-lg
+        .input-group-prepend
+          label.input-group-text.fieldName(for='name') 貓員名稱 
+        input.form-control#name(
+          type="text"
+          name='name'
+          pattern="^[a-z A-Z 0-9]{5,10}"
+          data-toggle="tooltip"
+          title="格式為5~10位英文/數字組合"
+          required
+        )
+      .form-group.mb-3.text-right
+        button.btn.btn-success.mb-1(type='submit') 送出
+  script.
+    $(document).ready(function(){
+      // input欄位mask設置(排除規則外字符輸入)
+      $('#name').inputmask({"mask": "*{5,10}"});
+      // 顯示欄位提示
+      $('[data-toggle="tooltip"]').tooltip({placement: "right", trigger: "hover focus"});
+    });
