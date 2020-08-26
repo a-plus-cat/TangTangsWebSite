@@ -7,7 +7,9 @@ block main
       .alert.alert-danger
         each err in errors
           p ⚠️ #{err.msg}
-    form(action='/resetPwd' method='post')
+    if success.toString()
+      .alert.alert-success #{success}
+    form(action='/setPwd' method='post')
       input(type='hidden' name='_csrf' value=csrfToken)
       input(type='hidden' name='authKey' value=authKey)
       .input-group.mb-3.input-group-lg

@@ -14,15 +14,24 @@ const sharp = require('sharp');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const nodeMailer = require('nodemailer');
-const sendGridTransport = require('nodemailer-sendgrid-transport');
+// const sendGridTransport = require('nodemailer-sendgrid-transport');
 const Member = require('../models/member');
+require('dotenv').config();
 
-const mailSender = nodeMailer.createTransport(sendGridTransport({
+const mailSender = nodeMailer.createTransport({
+  service: process.env.MAIL_SERVICE,
   auth: {
-    api_key: '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'
+    user: process.env.MAIL_ACCOUNT,
+    pass: process.env.MAIL_KEY
+  }
+});
+/*
+//const mailSender = nodeMailer.createTransport(sendGridTransport({
+  auth: {
+    api_key: process.env.API_KEY
   }
 }));
-
+*/
 // get log form
 exports.logFormGet = function (req, res) {
   res.render('logForm', { title: '貓員登入/註冊' });
@@ -168,19 +177,19 @@ exports.resetFormPost = [
             target.expDateOfAuth = Date.now() + 300000;
             await target.save();
             // send email with link which has permission
-            /*
             await mailSender.sendMail({
               to: target.email,
-              from: 'tangtang.websample.com',
-              subject: '重設帳戶密碼',
+              from: process.env.MAIL_ACCOUNT,
+              subject: "重設帳戶密碼-TangTang's record",
               html: `
-                <h3>HellO ${target.name}</h3>
+                <h3>Hello ${target.name}</h3>
                 <p>請點擊下列連結進行密碼重設動作，謝謝<p>
                 <a href="${authURL}">密碼重設</a>
-                <p style='color:red;'>⚠️ <i>此為系統信件 請勿回覆</i></p>
+                <p style='color:orange;'>⚠️ <b>請於5分鐘內完成密碼修改動作，謝謝</b></p>
+                <p style='color:red;'>⛔️ <i>此為系統信件 請勿回覆</i></p>
               `
             });
-            */
+
             req.flash('success', '驗證信件寄出 請至信箱確認');
             res.redirect('/login');
           } catch (error) {
@@ -254,7 +263,7 @@ exports.postSetPwd = [
           member.expDateOfAuth = null;
           member.save((error) => {
             if (error) return next(error);
-            res.flash('success', '密碼修改成功 請重新登入');
+            req.flash('success', '密碼修改成功 請重新登入');
             res.redirect('/login');
           });
         } catch (e) { res.redirect('/resetPwd'); }

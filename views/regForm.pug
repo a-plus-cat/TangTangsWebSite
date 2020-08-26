@@ -99,9 +99,6 @@ block main
           button.btn.btn-primary(type='button' data-dismiss='modal') Close
   script.
     $(document).ready(function(){
-      // 重置表格
-      // const form = $('form').get(0);
-      // form.reset();
       $("#notice").modal("show");
       // input欄位mask設置(排除規則外字符輸入)
       $('#name').inputmask({"mask": "*{5,10}"});
