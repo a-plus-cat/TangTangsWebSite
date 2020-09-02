@@ -1,0 +1,85 @@
+extends layout
+
+block main
+  #photoAlbum(style='cursor:grab;')
+    .hard.frontCover TangTang's photos
+    .hard.frontBack
+    each photo in photoList
+      .photoField: img.photo(src=`/photoAlbum/photo/${photo._id}` width='70%' style='cursor:zoom-in;')
+    div
+      #pastePhoto 
+        - const url = `?_csrf=${csrfToken}`
+        form#photoUpload(
+          action=url 
+          method="post" 
+          enctype="multipart/form-data" 
+          style='width:100%;height:100%'
+        )
+          label.imgUpload(for='photos') 
+            i 點此上傳圖片...
+          input#photos(type="file" name="photos" accept="image/*" multiple)
+      .mt-3.text-center
+        button.btn.btn-success(type='submit' form='photoUpload') 確認傳送
+    if !(photoList.length % 2)
+      div
+    .hard.endBack
+    .hard.endCover
+  .modal#zoomImg
+    .modal-dailog.modal-lg.modal-dialog-scrollable#modal
+      .modal-content
+        .modal-header
+          h3.modal-title TangTang の photo
+        .modal-body.text-center
+          img#showZoomImg(src='' style='max-width:100%;max-height:100%;')
+        .modal-footer
+          button.btn.btn-danger(type='button' data-dismiss='modal') 關閉
+  script.
+    let show = true;
+    const insideAlbum = $("#photoAlbum").html();
+    $(document).ready(function(){
+      if (window.innerWidth > 900) {
+        $("#photoAlbum").turn({
+          width: '70%',
+          height: '50vh',
+          autoCenter: true
+        });
+      } else show = false;
+    });
+
+    $(window).resize(function() {
+      if (window.innerWidth > 900) {
+        if (show) $("#photoAlbum").turn('size', '70%', '50vh');
+        else {
+          $("#photoAlbum").turn({
+            width: '70%',
+            height: '50vh',
+            autoCenter: true
+          });
+          show = true;
+        }
+      } else {
+        if (show) {
+          $("#photoAlbum").turn("destroy").remove();
+          const e = document.createElement('div');
+          $(e).attr('id', "photoAlbum");
+          $(e).html(insideAlbum);
+          $('#zoomImg').before(e);
+          show = false;
+          setTimeout(() => window.location.reload());
+        }
+      }
+      
+    });
+  
+    $('.photo').on('click', function () {
+      $('#showZoomImg').attr('src', $(this).attr('src'));
+      $('#zoomImg').modal('show');
+      const modal = $('#modal').get(0);
+      const topOffset = (window.innerHeight - modal.offsetHeight) / 2;
+      const leftOffset = (window.innerWidth - modal.offsetWidth) / 2 ;
+      $('#zoomImg').css({
+        "position":"absolute",
+        "top":`${topOffset}px`,
+        "left":`${leftOffset}px`
+      });
+    });

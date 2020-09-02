@@ -2,6 +2,7 @@
 const express = require('express');
 const passport = require('passport');
 const logController = require('../controllers/logController');
+const photoController = require('../controllers/photoController');
 
 const router = express.Router();
 
@@ -40,5 +41,12 @@ router.post('/resetPwd', logController.resetFormPost);
 router.get('/resetPwd/:token', logController.getSetPwd);
 // post request for set password
 router.post('/setPwd', logController.postSetPwd);
+
+// get request for show photo album
+router.get('/photoAlbum', photoController.photoAlbumGet);
+// get request for show photo
+router.get('/photoAlbum/photo/:id', photoController.photoGet);
+// post request for uploading the image
+router.post('/photoAlbum', photoController.photoPost);
 
 module.exports = router;

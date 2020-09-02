@@ -5,18 +5,20 @@ html
     meta(charset='utf-8')
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css")
-    link(rel='stylesheet', href='/stylesheets/main.css')
+    link(rel='stylesheet' href='/stylesheets/main.css')
+    link(rel='stylesheet' href='/stylesheets/photoAlbum.css')
     link(rel="shortcut icon" href="#")
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.5/jquery.inputmask.min.js")
+    script(src="/javascripts/turn.min.js")
     script(src="/javascripts/main.js")
-  body(onresize="resetMap()" onload='currentTime()')
+  body(onresize="resetMap()")
     //- 頁面標頭區塊
     header.titleBlock
-      h2(style='font-size:2.5vw') Tang-Tang's record
-      h4(style='font-size:1.5vw') 🐱 Join to our family in April 20 2019 🐱
+      h2 Tang-Tang's record
+      h4 🐱 Join to our family in April 20 2019 🐱
     //- 頁面主體區塊
     div.mainBlock
       //- reuse block declaration
@@ -32,7 +34,7 @@ html
             div#list1.pullLeft
               +showArticle(['行為相關', '健康相關', '食物偏好', '娛樂推薦'])
             button#title2.button 糖糖日記
-            button#title3.button 糖糖相簿
+            button#title3.button(onclick="window.location.href='/photoAlbum'") 糖糖相簿
             button#title4.button(onclick='listOpen(event)') 相關連結
             div#list4.pullLeft
               +showArticle(['使用資源', '實用連結', '站主聯繫'])
