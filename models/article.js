@@ -4,16 +4,12 @@ const mongoose = require('mongoose');
 
 const ArticleSchema = new mongoose.Schema(
   {
-    title: { type: String, max: 30, required: true },
-    content: { type: String, required: true },
-    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
+    author: { type: mongoose.Schema.Types.ObjectId, ref: 'Member' },
+    publishDate: { type: String },
+    category: { type: String, required: true },
+    title: { type: String, required: true },
+    content: { type: String, required: true }
   }
 );
-
-ArticleSchema
-  .virtual('url')
-  .get(function () {
-    return `/index/article/${this.id}`;
-  });
 
 module.exports = mongoose.model('Article', ArticleSchema);

@@ -1,0 +1,53 @@
+extends layout
+
+block main
+  each article in articleList
+    button.btn.btn-lg.article-btn.mt-1(
+      class=`${article.category}`
+      style='height:3.5rem'
+    ) 
+      .titleText 📝 【#{article.title}】
+    .contentCeil.my-2
+      .articleInfo.mb-3
+        img.userIcon(
+          src=`/forum/member/${article.author.id}`
+          style='width:20%'
+        )
+        table.table.table-bordered(style='width:75%')
+          tbody
+            tr
+              th 標題 
+              td #{article.title}
+            tr
+              th 文章發佈者 
+              td #{article.author.name}
+            tr
+              th 發佈日期 
+              td #{article.publishDate}
+      div
+        != article.content
+      .text-right.mt-2
+        if member && member.id === article.author.id
+          a.btn.mdBtn(href=`/publishArticle/${article.id}` title='編輯文章')
+            i.far(style='font-size:48px;color:red') &#xf044;
+        button.btn.reBtn(title='收起文章')
+          i.fas(style='font-size:48px;color:green') &#xf139;
+  script.
+    $(document).ready(function () {
+      function toggleArticle() {
+        $($(this).next()).slideToggle();
+      }
+
+      function retractArticle() {
+        $(this).parents('.contentCeil').slideToggle();
+      }
+      
+      $('.article-btn').hide();
+      $('.mainArea').css({
+        'padding-top':'5%',
+        'justify-content':'flex-start'
+      });
+      $('.article-btn').on('click', toggleArticle);
+      $('.reBtn').on('click', retractArticle);
+    });
+    

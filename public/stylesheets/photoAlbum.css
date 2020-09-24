@@ -36,13 +36,22 @@
   background-size: 50% 40% !important;
 }
 
+.photo {
+  padding: 25px;
+  border: 1px solid transparent;
+  border-image-source: url("../images/silverborder.png");
+  border-image-slice: 15%;
+  border-image-width: 25px;
+  border-image-repeat: round;
+}
+
 #pastePhoto {
   width:70%;
   height:50%;
   border:2px dashed gray;
 }
 
-/*
+
 #photoAlbum .page-wrapper{
   -webkit-perspective:2000px;
   -moz-perspective:2000px;
@@ -50,7 +59,7 @@
   -o-perspective:2000px;
   perspective:2000px;
 }
-*/
+
 
 #photoAlbum .hard{
   font-family: 'Microsoft JhengHei';
@@ -64,7 +73,7 @@
 }
 
 #photoAlbum .odd{
-  background:-webkit-gradient(linear, right top, left top, color-stop(0.95, #FFF), color-stop(1, #DADADA));
+  /*background:-webkit-gradient(linear, right top, left top, 0.95 #FFF, 1 #DADADA);*/
   background-image:-webkit-linear-gradient(right, #FFF 95%, #C4C4C4 100%);
   background-image:-moz-linear-gradient(right, #FFF 95%, #C4C4C4 100%);
   background-image:-ms-linear-gradient(right, #FFF 95%, #C4C4C4 100%);
@@ -79,7 +88,7 @@
 }
 
 #photoAlbum .even{
-  background:-webkit-gradient(linear, left top, right top, color-stop(0.95, #fff), color-stop(1, #dadada));
+  /*background:-webkit-gradient(linear, left top, right top,0.95 #fff, 1 #dadada);**/
   background-image:-webkit-linear-gradient(left, #fff 95%, #dadada 100%);
   background-image:-moz-linear-gradient(left, #fff 95%, #dadada 100%);
   background-image:-ms-linear-gradient(left, #fff 95%, #dadada 100%);

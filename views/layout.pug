@@ -11,6 +11,7 @@ html
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
+    script(src="https://kit.fontawesome.com/eb4214a07e.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.5/jquery.inputmask.min.js")
     script(src="/javascripts/turn.min.js")
     script(src="/javascripts/main.js")
@@ -22,35 +23,46 @@ html
     //- 頁面主體區塊
     div.mainBlock
       //- reuse block declaration
-      mixin showArticle(titles)
-        each e in titles
-          button.button(onmouseover="moveGlass(event)" onclick=`showContent(${e})`)= e
+      mixin showArticle(categorise, titles)
+        - for (let i = 0; i < titles.length; i += 1)
+          button.button(onmouseover="moveGlass(event)" onclick=`showContent(event, '${categorise[i]}')`)= titles[i]
         button.button(onclick="listClose(event)" onmouseover="moveGlass(event)") back
       //- 左側功能連結區
       case currentPage
-        when '/forum'
-          aside.leftSide
-            button#title1.button(onclick='listOpen(event)') 貓員留言板
-            div#list1.pullLeft
-              +showArticle(['行為相關', '健康相關', '食物偏好', '娛樂推薦'])
-            button#title2.button 糖糖日記
-            button#title3.button(onclick="window.location.href='/photoAlbum'") 糖糖相簿
-            button#title4.button(onclick='listOpen(event)') 相關連結
-            div#list4.pullLeft
-              +showArticle(['使用資源', '實用連結', '站主聯繫'])
+        when '/'
+          div(style='width:20%;position:relative;')
         when '/login'  
         when '/register'
           div(style='width:20%;position:relative;')
             img(src='images/helloCat.gif' alt='HelloCat' width='100%' style='position:absolute;left:20px;top:30%;')
         default
-          div(style='width:20%;position:relative;')
+          aside.leftSide
+            button#title1.button(onclick="listOpen(event, '/forum')") 貓員留言板
+            div#list1.pullLeft(style='z-index:99999')
+              +showArticle(
+                ['behavior', 'health', 'food', 'entertainment'],
+                ['行為相關', '健康相關', '食物偏好', '娛樂推薦']
+              )
+            button#title2.button 糖糖日曆
+            button#title3.button(onclick="window.location.href='/photoAlbum'") 糖糖相簿
+            button#title4.button(onclick="listOpen(event, '/forum')") 相關連結
+            div#list4.pullLeft(style='z-index:99999')
+              +showArticle(
+                ['resource', 'usefulLink', 'contactMe'],
+                ['使用資源', '實用連結', '站主聯繫']
+              )
       //- 中間頁面主體區
-      div.mainArea
-        block main
+      if currentPage === '/photoAlbum'
+        .mainArea.notFlow
+          block main
+      else
+        .mainArea
+          block main
       //- 右側功能連結區
       div.rightSide
+        - const imgSelect = member ? '/images/maptreeLogout.png' : '/images/maptreeLogin.png';
         img#img_ID(
-          src='/images/maptree.png'
+          src=imgSelect
           alt='功能清單'
           usemap='#funcGuide'
           onload='resetMap()'
@@ -59,29 +71,30 @@ html
           area(
             alt="發表文章" 
             title="發表文章" 
-            href="" 
+            href="/publishArticle" 
             coords="59,190,161,260" 
             shape="rect"
           )
-          - const route = member ? '/logout' : '/login';
+          - const logRoute = member ? '/logout' : '/login';
+          - const tip = member ? '登出' : '登入';
           area(
-            alt="登入/登出"
-            title="登入/登出"
-            href=route
+            alt=tip
+            title=tip
+            href=logRoute
             coords="175,414,255,496"
             shape="rect"
           )
           area(
-            alt="相關連結"
-            title="相關連結"
+            alt="會員資料"
+            title="會員資料"
             href=""
             coords="240,147,46"
             shape="circle"
           ) 
           area(
-            alt="文章"
-            title="文章"
-            href='/forum'
+            alt="回首頁"
+            title="回首頁"
+            href='/'
             coords="95,428,40"
             shape="circle"
           )
