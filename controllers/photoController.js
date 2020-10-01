@@ -19,7 +19,7 @@ exports.photoAlbumGet = (req, res, next) => {
 exports.photoGet = (req, res, next) => {
   Photo.findById(req.params.id, (err, result) => {
     if (err) return next(err);
-    res.contentType('image/png');
+    res.contentType('image/jpeg');
     res.send(result.photo);
   });
 };
@@ -37,6 +37,7 @@ exports.photoPost = [
           .toBuffer();
         // save photo to db
         await Photo.create({
+          provider: req.body.provider,
           photo: buffer,
           uploadDate: Date.now()
         });

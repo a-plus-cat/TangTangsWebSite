@@ -6,14 +6,52 @@
 #photoAlbum .page {
   width: '70%';
   height: '50vh';
-  /*background:#f0dfc5f5 !important;*/
-  /*line-height:15rem;*/
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   font-size:1.5rem;
-  /*text-align:center;*/
+}
+
+.contentPage {
+  position: relative;
+}
+
+.bookmark {
+  color: black;
+  font-size: 1.8rem;
+  position: absolute;
+  top: 1rem;
+  cursor: pointer;
+}
+
+.pageNum {
+  font-size: 1rem;
+  position: absolute;
+  bottom: 0.5rem;
+}
+
+.leftAlign {
+  left: 0.5rem;
+}
+
+.rightAlign {
+  right: 0.5rem;
+}
+
+#albumControl > button > i {
+  font-size: 2rem;
+}
+
+#pages {
+  /*height: 100%;*/
+  font-size: 1.4rem;
+  width: auto;
+  position: absolute;
+  top: 0;
+  cursor: pointer;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .frontCover {
@@ -27,7 +65,7 @@
 }
 
 .endCover {
-  background: url('../images/photoAlbumCover2.jpg') no-repeat center center !important;
+  background: white url('../images/photoAlbumCover2.jpg') no-repeat center center !important;
   background-size: contain !important;
 }
 
@@ -37,6 +75,7 @@
 }
 
 .photo {
+  max-height: 90%;
   padding: 25px;
   border: 1px solid transparent;
   border-image-source: url("../images/silverborder.png");
@@ -99,4 +138,40 @@
   -o-box-shadow:inset 0 0 5px #666;
   -ms-box-shadow:inset 0 0 5px #666;
   box-shadow:inset 0 0 5px #666;
+}
+
+.cloudIcon {
+  font-size: 4rem;
+  color: lightblue;
+  position: relative;
+}
+
+.arrowIcon {
+  font-size: 2rem;
+  color: transparent;
+  position: absolute;
+  animation-name:  flowTop;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@keyframes flowTop {
+  0% {
+    top: 13rem;
+    background: linear-gradient(blue, lightskyblue, lightblue);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  50% {
+    top: 12rem; background:
+    linear-gradient(lightskyblue, blue, lightblue); 
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  100% {
+    top: 11.5rem; 
+    background: linear-gradient(lightskyblue, lightblue, blue);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
 }

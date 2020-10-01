@@ -29,9 +29,9 @@ block main
       .text-right.mt-2
         if member && member.id === article.author.id
           a.btn.mdBtn(href=`/publishArticle/${article.id}` title='編輯文章')
-            i.far(style='font-size:48px;color:red') &#xf044;
+            i.far.swingFont(style='font-size:48px;color:red') &#xf044;
         button.btn.reBtn(title='收起文章')
-          i.fas(style='font-size:48px;color:green') &#xf139;
+          i.fas.tdMoveFont(style='font-size:48px;color:green') &#xf139;
   script.
     $(document).ready(function () {
       function toggleArticle() {

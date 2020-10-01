@@ -2,28 +2,55 @@ extends layout
 
 block main
   #photoAlbum(style='cursor:grab;')
-    .hard.frontCover TangTang's photos
+    .hard.frontCover#albumTitle TangTang's photos
     .hard.frontBack
-    each photo in photoList
-      .photoField: img.photo(src=`/photoAlbum/photo/${photo._id}` width='70%' style='cursor:zoom-in;')
-    div
-      #pastePhoto 
-        - const url = `?_csrf=${csrfToken}`
-        form#photoUpload(
-          action=url 
-          method="post" 
-          enctype="multipart/form-data" 
-          style='width:100%;height:100%'
-        )
-          label.imgUpload(for='photos') 
-            i 點此上傳圖片...
-          input#photos(type="file" name="photos" accept="image/*" multiple)
-      .mt-3.text-center
-        button.btn.btn-success(type='submit' form='photoUpload') 確認傳送
-    if !(photoList.length % 2)
-      div
+    - for (let i = 0; i < photoList.length; i += 1)
+      .contentPage.unselectable
+        if i % 2
+          .bookmark.swingFont.rightAlign(title='加入書籤')
+            i.far &#xf005;
+          span.pageNum.leftAlign #{i + 1}
+        else
+          .bookmark.swingFont.leftAlign(title='加入書籤')
+            i.far &#xf005;
+          span.pageNum.rightAlign #{i + 1}
+        img.photo(src=`/photoAlbum/photo/${photoList[i].id}` width='70%' style='cursor:zoom-in;')
+    if member
+      .contentPage
+        #pastePhoto 
+          - const url = `?_csrf=${csrfToken}`
+          form#photoUpload(
+            action=url 
+            method="post" 
+            enctype="multipart/form-data" 
+            style='width:100%;height:100%'
+          )
+            label.imgUpload(for='photos' title='點此上傳圖片') 
+              i.fas.cloudIcon &#xf382;
+              i.fas.arrowIcon &#xf102;
+            input#photos(type="file" name="photos" accept="image/*" multiple required)
+            input#provider(type='hidden' name='provider' value=member.id)
+        .mt-3.text-center
+          button.btn.btn-success(type='submit' form='photoUpload') 確認傳送
+    if (member && !(photoList.length % 2)) || (!member && (photoList.length % 2))
+      .contentPage
     .hard.endBack
     .hard.endCover
+  .text-center.mt-5#albumControl
+    button.btn.btn-primary.mr-1#addPhotos(title='新增圖片')
+      i.fas &#xf093;
+    button.btn.btn-success.mr-1#prePage(title='上一頁') 
+      i.fas &#xf137;
+    button.btn.btn-success.mr-1#nextPage(title='下一頁') 
+      i.fas &#xf138;
+    .btn(style='padding:0')
+      .input-group.input-group-lg
+        .input-group-prepend
+          lable.input-group-text.fieldName(for='pages') 跳轉頁面
+        div(style='position:relative')
+          select.custom-select#pages(name='pages' data-live-search="true")
+            - for (let i = 1; i <= photoList.length; i += 1) 
+              option(value=`${i}`) #{i}
   .modal#zoomImg
     .modal-dailog.modal-lg.modal-dialog-scrollable#modal
       .modal-content
@@ -36,6 +63,20 @@ block main
   script.
     let show = true;
     const insideAlbum = $("#photoAlbum").html();
+
+    function magnifyPhoto() {
+      $('#showZoomImg').attr('src', $(this).attr('src'));
+      $('#zoomImg').modal('show');
+      const modal = $('#modal').get(0);
+      const topOffset = (window.innerHeight - modal.offsetHeight) / 2;
+      const leftOffset = (window.innerWidth - modal.offsetWidth) / 2 ;
+      $('#zoomImg').css({
+        "position":"absolute",
+        "top":`${topOffset}px`,
+        "left":`${leftOffset}px`
+      });
+    }
+
     $(document).ready(function(){
       if (window.innerWidth > 900) {
         $("#photoAlbum").turn({
@@ -44,10 +85,35 @@ block main
           autoCenter: true
         });
       } else show = false;
+
+      $('#addPhotos').on('click', function () {
+        const pages = $("#photoAlbum").turn("pages");
+        const numofAddPhotos = #{photoList.length} % 2 ? pages - 2 : pages - 4 ;
+        $("#photoAlbum").turn("page", numofAddPhotos);
+      });
+
+      $('#prePage').on('click', function () {
+        $("#photoAlbum").turn("previous");
+      });
+
+      $('#nextPage').on('click', function () {
+        $("#photoAlbum").turn("next");
+      });
+      
+      $('#pages').on('focus', function () {this.size = 3;});
+      $('#pages').on('blur', function () {this.size = 1;});
+      $('#pages').on('change', function () {
+        this.size = 1;
+        this.blur();
+        const targetPage = parseInt(this.value) + 2;
+        $("#photoAlbum").turn('page', targetPage);
+      });
+
+      if (window.innerWidth <= 850) $('.photo').on('click', magnifyPhoto);
     });
 
     $(window).resize(function() {
-      if (window.innerWidth > 900) {
+      if (window.innerWidth > 850) {
         if (show) $("#photoAlbum").turn('size', '70%', '50vh');
         else {
           $("#photoAlbum").turn({
@@ -67,19 +133,28 @@ block main
           show = false;
           setTimeout(() => window.location.reload());
         }
-      }
-      
+      } 
     });
-  
-    $('.photo').on('click', function () {
-      $('#showZoomImg').attr('src', $(this).attr('src'));
-      $('#zoomImg').modal('show');
-      const modal = $('#modal').get(0);
-      const topOffset = (window.innerHeight - modal.offsetHeight) / 2;
-      const leftOffset = (window.innerWidth - modal.offsetWidth) / 2 ;
-      $('#zoomImg').css({
-        "position":"absolute",
-        "top":`${topOffset}px`,
-        "left":`${leftOffset}px`
+
+    $("#photoAlbum").bind("turned", function(event, page, view) {
+      $('.photo').off('click');
+      $('.bookmark').off('click');
+
+      $('.photo').on('click', magnifyPhoto);
+      
+      $('.bookmark').on('click', function () {
+        const pageNum = $(this).next().text();
+        if ($(this).find('i').is('.far')) {
+          $(this).empty().append('<i class="fas">&#xf005;</i>');
+          $(this).css('color', 'orange');
+          $(this).attr('title', '取消書籤');
+          $('#pages > option').eq(pageNum - 1).text(`${pageNum}  🌟`);
+        } else {
+          $(this).empty().append('<i class="far">&#xf005;</i>');
+          $(this).css('color', 'black');
+          $(this).attr('title', '加入書籤');
+          $('#pages > option').eq(pageNum - 1).text(pageNum);
+        }        
       });
+  
     });
