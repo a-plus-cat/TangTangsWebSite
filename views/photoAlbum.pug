@@ -7,38 +7,36 @@ block main
     - for (let i = 0; i < photoList.length; i += 1)
       .contentPage.unselectable
         if i % 2
-          .bookmark.swingFont.rightAlign(title='加入書籤')
+          span.bookmark.swingFont.rightAlign(title='加入書籤')
             i.far &#xf005;
           span.pageNum.leftAlign #{i + 1}
+          if member && member.id === photoList[i].provider.toString()
+            span.deleteBtn.swingFont.rightAlign(title='剪下照片')
+              i.fas &#xf0c4;
         else
-          .bookmark.swingFont.leftAlign(title='加入書籤')
+          span.bookmark.swingFont.leftAlign(title='加入書籤')
             i.far &#xf005;
           span.pageNum.rightAlign #{i + 1}
-        img.photo(src=`/photoAlbum/photo/${photoList[i].id}` width='70%' style='cursor:zoom-in;')
-    if member
-      .contentPage
-        #pastePhoto 
-          - const url = `?_csrf=${csrfToken}`
-          form#photoUpload(
-            action=url 
-            method="post" 
-            enctype="multipart/form-data" 
-            style='width:100%;height:100%'
-          )
-            label.imgUpload(for='photos' title='點此上傳圖片') 
-              i.fas.cloudIcon &#xf382;
-              i.fas.arrowIcon &#xf102;
-            input#photos(type="file" name="photos" accept="image/*" multiple required)
-            input#provider(type='hidden' name='provider' value=member.id)
-        .mt-3.text-center
-          button.btn.btn-success(type='submit' form='photoUpload') 確認傳送
-    if (member && !(photoList.length % 2)) || (!member && (photoList.length % 2))
+          if member && member.id === photoList[i].provider.toString()
+            span.deleteBtn.swingFont.leftAlign(title='剪下照片')
+              i.fas &#xf0c4;
+        if photoList[i].url
+          img.photo(id=photoList[i].id src=photoList[i].url width='70%' style='cursor:zoom-in;')
+        else
+          img.photo(id=photoList[i].id src=`/photoAlbum/photo/${photoList[i].id}` width='70%' style='cursor:zoom-in;')
+    if photoList.length % 2
       .contentPage
     .hard.endBack
     .hard.endCover
   .text-center.mt-5#albumControl
-    button.btn.btn-primary.mr-1#addPhotos(title='新增圖片')
-      i.fas &#xf093;
+    if member
+      button.btn.btn-danger.mr-1#delPhotos(title='刪除圖片')
+        i.fas &#xf2ed;
+      button.btn.btn-primary.mr-1#addPhotos(title='新增圖片')
+        i.fas &#xf093;
+    else
+      a.btn.btn-secondary.mr-1(href='/photoAlbum/getPremission' title='新增圖片')
+        i.fas &#xf093;
     button.btn.btn-success.mr-1#prePage(title='上一頁') 
       i.fas &#xf137;
     button.btn.btn-success.mr-1#nextPage(title='下一頁') 
@@ -51,8 +49,24 @@ block main
           select.custom-select#pages(name='pages' data-live-search="true")
             - for (let i = 1; i <= photoList.length; i += 1) 
               option(value=`${i}`) #{i}
+  #screenMask
+  .modal#photoAlert
+    .modal-dialog.modal-dialog-centered
+      .modal-content
+        .modal-header
+          if success.toString()
+            h3.modal-title Tang-Tang の 小提醒
+          else
+            h3.modal-title ⚠️ 錯誤訊息
+        .modal-body
+          if success.toString()
+            .alert.alert-success#okMsg #{success}
+          else
+            .alert.alert-danger#errMsg #{failure}
+        .modal-footer
+          button.btn.btn-danger(type='button' data-dismiss='modal') 關閉
   .modal#zoomImg
-    .modal-dailog.modal-lg.modal-dialog-scrollable#modal
+    .modal-dialog.modal-lg.modal-dialog-centered.modal-dialog-scrollable
       .modal-content
         .modal-header
           h3.modal-title TangTang の photo
@@ -60,24 +74,63 @@ block main
           img#showZoomImg(src='' style='max-width:100%;max-height:100%;')
         .modal-footer
           button.btn.btn-danger(type='button' data-dismiss='modal') 關閉
+  if member
+    .modal#addImg
+      .modal-dialog.modal-lg.modal-dialog-centered
+        .modal-content
+          .modal-header
+            ul.nav.nav-pills(role='tablist')
+              li.nav-item: a.nav-link.active(data-toggle='pill' href='#localPaste') 本地上傳
+              li.nav-item: a.nav-link(data-toggle='pill' href='#urlPaste') 網址連結
+          .modal-body.d-flex.justify-content-center
+            .tab-content(style='width:100%;')
+              #localPaste.unselectable.container.tab-pane.active
+                form#photoUpload(
+                  action=`?_csrf=${csrfToken}`
+                  method="post" 
+                  enctype="multipart/form-data" 
+                  style='width:100%;height:100%;'
+                )
+                  label.imgUpload#uploadNotice(for='photos')
+                    span.flashingWord 點此上傳圖片(數量上限:5 單檔大小上限:10MB) 
+                    i.fas.cloudIcon &#xf382;
+                    i.fas.arrowIcon &#xf102;
+                  input#photos(type="file" name="photos" accept="image/*" multiple required)
+                  input(type='hidden' name='provider' value=member.id)
+              #urlPaste.container.tab-pane
+                form#urlUpload(action=`/imgUrl/?_csrf=${csrfToken}` method="post")
+                  .input-group.d-flex.justify-content-center
+                    .input-group-prepend
+                      label.input-group-text.fieldName(for='photo') 圖片來源
+                    input#photo(type="text" name="photo" style='width:60%' required)
+                  input(type='hidden' name='provider' value=member.id)
+          .modal-footer.d-flex.justify-content-center
+            button.btn.btn-success#uploadPhoto(type='button') 相片黏貼
+    .modal#delImg
+      .modal-dialog.modal-dialog-centered
+        .modal-content
+          .modal-header
+            h3.modal-title ⚠️ 刪除相片
+          .modal-body
+            p.text-danger.font-weight-bold.lead 確定要將已剪下的相片刪除?
+            p.small.font-italic (點選相簿剪刀圖示即可剪下相片)
+          .modal-footer.d-flex.justify-content-center
+            button.btn.btn-danger#deletePhoto(type='button') 刪除
+            button.btn.btn-secondary(type='button' data-dismiss='modal') 取消
   script.
     let show = true;
+    const garbageCan = {};
     const insideAlbum = $("#photoAlbum").html();
 
     function magnifyPhoto() {
       $('#showZoomImg').attr('src', $(this).attr('src'));
       $('#zoomImg').modal('show');
-      const modal = $('#modal').get(0);
-      const topOffset = (window.innerHeight - modal.offsetHeight) / 2;
-      const leftOffset = (window.innerWidth - modal.offsetWidth) / 2 ;
-      $('#zoomImg').css({
-        "position":"absolute",
-        "top":`${topOffset}px`,
-        "left":`${leftOffset}px`
-      });
     }
 
     $(document).ready(function(){
+      $('#screenMask').hide();
+      if ($('#errMsg').text() || $('#okMsg').text()) $('#photoAlert').modal('show');
+
       if (window.innerWidth > 900) {
         $("#photoAlbum").turn({
           width: '70%',
@@ -86,10 +139,48 @@ block main
         });
       } else show = false;
 
-      $('#addPhotos').on('click', function () {
-        const pages = $("#photoAlbum").turn("pages");
-        const numofAddPhotos = #{photoList.length} % 2 ? pages - 2 : pages - 4 ;
-        $("#photoAlbum").turn("page", numofAddPhotos);
+      $('#delPhotos').on('click', () => $('#delImg').modal('show'));
+
+      $('#deletePhoto').on('click', () => {
+        const idCollect = Object.keys(garbageCan);
+        if (!idCollect.length) {
+          alert('未剪下任何相片!!!');
+          $('#delImg').modal('hide');
+        } else {
+          // remove pasted back photo's id
+          for(let i = 0; i < idCollect.length; i += 1) {
+            if (garbageCan[idCollect[i]].value) delete garbageCan[idCollect[i]];
+          }
+          const delIdStr = JSON.stringify(Object.keys(garbageCan));
+          const token = '#{csrfToken}';
+          const location = window.location.href;
+
+          $.ajax({
+            method: 'POST',
+            type: 'POST',
+            url: `/photoAlbum/deletePhoto?_csrf=${token}`,
+            contentType: "application/json; charset=utf-8",
+            data: delIdStr
+          })
+          .done((data) => {
+            if (data) alert('相片刪除成功!!!');
+            else alert('相片刪除失敗...請稍後再試');
+            window.location.replace(location);
+          })
+          .fail(() => alert('刪除處理失敗....'));
+        }
+      });
+
+      $('#addPhotos').on('click', () => $('#addImg').modal('show'));
+
+      $('#uploadPhoto').on('click', function () {
+        if ($('#localPaste').hasClass('active')) {
+          $('#uploadNotice').html(
+            '<span class="spinner-border text-primary"></span><span style="font-size:24px">圖片上傳中...請稍後</span>'
+          );
+          $('#screenMask').show();
+          $('#photoUpload').submit();
+        } 
       });
 
       $('#prePage').on('click', function () {
@@ -139,6 +230,7 @@ block main
     $("#photoAlbum").bind("turned", function(event, page, view) {
       $('.photo').off('click');
       $('.bookmark').off('click');
+      $('.deleteBtn').off('click');
 
       $('.photo').on('click', magnifyPhoto);
       
@@ -156,5 +248,20 @@ block main
           $('#pages > option').eq(pageNum - 1).text(pageNum);
         }        
       });
-  
+
+      $('.deleteBtn').on('click', function () {
+        if ($(this).find('i').is('.fas')) {
+          $(this).empty().append('<i class="far">&#xf1c5;</i>');
+          $(this).css('color', 'lightskyblue');
+          $(this).next().hide();
+          garbageCan[$(this).next().attr('id')] = true;
+          $(this).attr('title', '貼回照片');
+        } else {
+          $(this).empty().append('<i class="fas">&#xf0c4;</i>');
+          $(this).css('color', 'gray');
+          $(this).next().show();
+          garbageCan[$(this).next().attr('id')] = false;
+          $(this).attr('title', '剪下照片');
+        }
+      });
     });

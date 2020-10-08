@@ -16,7 +16,7 @@ const upload = multer();
 
 // get publishing form
 exports.artcleFormGet = (req, res) => {
-  if (req.user) res.render('articleForm', { title: '發表文章', article: '' });
+  if (req.user) res.render('articleForm', { title: '發表文章', article: '', alreadyStore: false });
   else {
     req.flash('failure', '發表文章之前 請先登入...');
     res.redirect('/login');
@@ -37,6 +37,7 @@ exports.artclePublish = [
         {
           title: '發表文章',
           article: req.body,
+          alreadyStore: false,
           error: err.array()
         });
       return;
@@ -84,6 +85,7 @@ exports.artclePublish = [
             res.render('articleForm', {
               title: '發表文章',
               article: req.body,
+              alreadyStore: false,
               error: ['上傳失敗 請重新發表文章']
             });
           }
@@ -146,7 +148,9 @@ exports.insertImgGet = (req, res, next) => {
 // get publishing form for modify
 exports.articleModify = (req, res, next) => {
   Article.findById(req.params.id, (err, result) => {
+    const oldArticle = result;
     if (err) return next(err);
-    res.render('articleForm', { title: '發表文章', article: result });
+    oldArticle.content = oldArticle.content.replace(/\r?\n|\r/g, '');
+    res.render('articleForm', { title: '發表文章', article: oldArticle, alreadyStore: true });
   });
 };

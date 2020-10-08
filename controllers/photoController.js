@@ -1,9 +1,23 @@
+/* eslint-disable default-case */
+/* eslint-disable object-shorthand */
+/* eslint-disable func-names */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable comma-dangle */
 /* eslint-disable consistent-return */
+const path = require('path');
 const multer = require('multer');
 
-const upload = multer();
+const upload = multer({
+  limits: { fileSize: 10000000 },
+  fileFilter: function (req, file, cb) {
+    const rule = /jpeg|jpg|png|gif/;
+    const checkExtend = rule.test(path.extname(file.originalname).toLowerCase());
+    const checkMime = rule.test(file.mimetype);
+    if (checkExtend && checkMime) return cb(null, true);
+    cb('上傳檔案非圖片類型!!!');
+  }
+}).array('photos', 5);
+
 const sharp = require('sharp');
 const Photo = require('../models/photos');
 
@@ -15,6 +29,12 @@ exports.photoAlbumGet = (req, res, next) => {
   });
 };
 
+// get permission of upload photos
+exports.allowUpload = (req, res) => {
+  req.flash('failure', '上傳相片之前 請先登入...');
+  res.redirect('/login');
+};
+
 // get single photo
 exports.photoGet = (req, res, next) => {
   Photo.findById(req.params.id, (err, result) => {
@@ -24,9 +44,25 @@ exports.photoGet = (req, res, next) => {
   });
 };
 
-// handle upload image
+// handle image upload by local side
 exports.photoPost = [
-  upload.array('photos'),
+  (req, res, next) => {
+    upload(req, res, (err) => {
+      if (err) {
+        if (err instanceof multer.MulterError) {
+          switch (err.code) {
+            case 'LIMIT_FILE_SIZE':
+              req.flash('failure', '上傳檔案容量過大');
+              break;
+            case 'LIMIT_UNEXPECTED_FILE':
+              req.flash('failure', '上傳數量超出規定');
+              break;
+          }
+        } else req.flash('failure', err);
+        res.redirect('/photoAlbum');
+      } else next();
+    });
+  },
   async (req, res) => {
     try {
       const photos = req.files;
@@ -42,9 +78,18 @@ exports.photoPost = [
           uploadDate: Date.now()
         });
       }
+      req.flash('success', '相片上傳成功!!!');
       res.redirect('/photoAlbum');
     } catch (e) {
+      req.flash('failure', '上傳發生錯誤...請重新嘗試');
       res.redirect('/photoAlbum');
     }
   }
 ];
+
+exports.deletePhoto = (req, res) => {
+  Photo.deleteMany({ _id: req.body }, (err) => {
+    if (err) res.send(false);
+    else res.send(true);
+  });
+};

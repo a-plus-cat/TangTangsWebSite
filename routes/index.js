@@ -44,8 +44,12 @@ router.post('/setPwd', logController.postSetPwd);
 router.get('/photoAlbum', photoController.photoAlbumGet);
 // get request for showing photo
 router.get('/photoAlbum/photo/:id', photoController.photoGet);
+// get request for getting permission of upload photos
+router.get('/photoAlbum/getPremission', photoController.allowUpload);
 // post request for uploading the image
 router.post('/photoAlbum', photoController.photoPost);
+// post request for deleting the image
+router.post('/photoAlbum/deletePhoto', photoController.deletePhoto);
 
 // get request for publishing article
 router.get('/publishArticle', articleController.artcleFormGet);

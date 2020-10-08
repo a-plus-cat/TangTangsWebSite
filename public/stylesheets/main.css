@@ -564,7 +564,7 @@ legend {
   .arrowIcon {
     display: none !important;
   }
-  .bookmark, .pageNum, #albumControl {
+  .bookmark, .deleteBtn, .pageNum, #albumControl {
     display: none;
   }
 }
@@ -653,4 +653,16 @@ table.table-bordered > tbody > tr > td {
   35% {transform: translateY(10px);}
   65% {transform: translateY(10px);}
   100% {transform: translateY(-10px);}
+}
+
+.fas {
+  font-size: 1.8rem;
+}
+
+.imgUpload > .fas:nth-child(2) {
+  font-size: 6rem;
+}
+
+.imgUpload > .fas:nth-child(3) {
+  font-size: 3rem;
 }

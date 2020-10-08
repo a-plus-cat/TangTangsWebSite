@@ -355,11 +355,10 @@ block main
       let fontSize = '';
       let insertImgSrc = '';
      
-      const category = '#{article.category}';
-      const content = '!{article.content}';
-      if (category) $('#category').val(category);
-      if (content) $('#writeField').html(content);
-      
+      if (#{alreadyStore}) {
+        $('#category').val('#{article.category}');
+        $('#writeField').html('!{article.content}');
+      }
 
       if ($('#emptyAlert').text()) $('#alert').modal('show');
       $('[data-toggle="tooltip"]').tooltip({placement: "top", trigger: "focus"});

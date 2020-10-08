@@ -28,10 +28,24 @@ block main
         != article.content
       .text-right.mt-2
         if member && member.id === article.author.id
-          a.btn.mdBtn(href=`/publishArticle/${article.id}` title='編輯文章')
+          button.btn.delBtn(type='button' title='刪除文章')
+            i.fas.swingFont(style='font-size:48px;color:gray') &#xf2ed;
+          a.btn(href=`/publishArticle/${article.id}` title='編輯文章')
             i.far.swingFont(style='font-size:48px;color:red') &#xf044;
-        button.btn.reBtn(title='收起文章')
+        button.btn.reBtn(type='button' title='收起文章')
           i.fas.tdMoveFont(style='font-size:48px;color:green') &#xf139;
+  .modal#deleteAlert
+    .modal-dialog.modal-sm.modal-dialog-centered
+      .modal-content
+        .modal-header
+          h4(style='color:red')
+            i.fas &#xf071;
+            |  Warning
+        .modal-body
+          .text-center 是否刪除檔案
+          .text-center.mt-3
+            button.btn.btn-danger.mr-3#delArticle(type='button') 確定
+            button.btn.btn-secondary.ml-3(type='button' data-dismiss='modal') 取消
   script.
     $(document).ready(function () {
       function toggleArticle() {
@@ -48,6 +62,8 @@ block main
         'justify-content':'flex-start'
       });
       $('.article-btn').on('click', toggleArticle);
+
+      $('.delBtn').on('click', () => $('#deleteAlert').modal('show'));
       $('.reBtn').on('click', retractArticle);
     });
     
