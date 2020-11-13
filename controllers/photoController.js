@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable default-case */
 /* eslint-disable object-shorthand */
 /* eslint-disable func-names */
@@ -86,6 +87,31 @@ exports.photoPost = [
     }
   }
 ];
+
+// handle image upload by url
+exports.urlPost = (req, res) => {
+  const imgUrl = req.body.photo;
+  const rule = /(^https:\/\/(?:[a-z0-9\-]+\.)+[a-z0-9]+\/(?:[^\s\/]+\/)*[^\\\/\:\?\*\"<>\|]+\.(?:jpg|jpeg|gif|png))(?:\?[^\?]*)?$/i;
+  const validUrl = imgUrl.match(rule);
+  if (validUrl) {
+    Photo.create({
+      provider: req.body.provider,
+      url: validUrl[1],
+      uploadDate: Date.now()
+    }, (err) => {
+      if (err) {
+        req.flash('failure', '發生錯誤...請重新嘗試');
+        res.redirect('/photoAlbum');
+      } else {
+        req.flash('success', '相片連結建立成功!!!');
+        res.redirect('/photoAlbum');
+      }
+    });
+  } else {
+    req.flash('failure', '無效的相片連結...');
+    res.redirect('/photoAlbum');
+  }
+};
 
 exports.deletePhoto = (req, res) => {
   Photo.deleteMany({ _id: req.body }, (err) => {

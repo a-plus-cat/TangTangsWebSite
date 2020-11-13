@@ -7,7 +7,7 @@ html
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css")
     link(rel='stylesheet' href='/stylesheets/main.css')
     link(rel='stylesheet' href='/stylesheets/photoAlbum.css')
-    link(rel="shortcut icon" href="#")
+    link(rel="icon" href="/images/favicon.ico" type="image/x-icon")
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
@@ -43,10 +43,9 @@ html
                 ['behavior', 'health', 'food', 'entertainment'],
                 ['行為相關', '健康相關', '食物偏好', '娛樂推薦']
               )
-            button#title2.button 糖糖日曆
-            button#title3.button(onclick="window.location.href='/photoAlbum'") 糖糖相簿
-            button#title4.button(onclick="listOpen(event, '/forum')") 相關連結
-            div#list4.pullLeft(style='z-index:99999')
+            button#title2.button(onclick="window.location.href='/photoAlbum'") 糖糖相簿
+            button#title3.button(onclick="listOpen(event, '/forum')") 相關連結
+            div#list3.pullLeft(style='z-index:99999')
               +showArticle(
                 ['resource', 'usefulLink', 'contactMe'],
                 ['使用資源', '實用連結', '站主聯繫']

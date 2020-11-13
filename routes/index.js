@@ -46,8 +46,10 @@ router.get('/photoAlbum', photoController.photoAlbumGet);
 router.get('/photoAlbum/photo/:id', photoController.photoGet);
 // get request for getting permission of upload photos
 router.get('/photoAlbum/getPremission', photoController.allowUpload);
-// post request for uploading the image
-router.post('/photoAlbum', photoController.photoPost);
+// post request for uploading the image by local side
+router.post('/photoAlbum/imgFile', photoController.photoPost);
+// post request for upload the image by url
+router.post('/photoAlbum/imgUrl', photoController.urlPost);
 // post request for deleting the image
 router.post('/photoAlbum/deletePhoto', photoController.deletePhoto);
 
@@ -66,5 +68,7 @@ router.get('/publishArticle/insertImg/:name', articleController.insertImgGet);
 router.get('/forum', articleController.articleShow);
 // get request for showing user icon
 router.get('/forum/member/:id', articleController.iconGet);
+// post request for deleting the article
+router.post('/forum/deleteArticle', articleController.articleDelete);
 
 module.exports = router;

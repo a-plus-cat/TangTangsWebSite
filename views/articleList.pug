@@ -28,12 +28,13 @@ block main
         != article.content
       .text-right.mt-2
         if member && member.id === article.author.id
-          button.btn.delBtn(type='button' title='刪除文章')
+          button.btn.delBtn(id=article.id type='button' title='刪除文章')
             i.fas.swingFont(style='font-size:48px;color:gray') &#xf2ed;
           a.btn(href=`/publishArticle/${article.id}` title='編輯文章')
             i.far.swingFont(style='font-size:48px;color:red') &#xf044;
         button.btn.reBtn(type='button' title='收起文章')
           i.fas.tdMoveFont(style='font-size:48px;color:green') &#xf139;
+  #screenMask
   .modal#deleteAlert
     .modal-dialog.modal-sm.modal-dialog-centered
       .modal-content
@@ -42,6 +43,7 @@ block main
             i.fas &#xf071;
             |  Warning
         .modal-body
+          input#articleId(type='hidden' value='')
           .text-center 是否刪除檔案
           .text-center.mt-3
             button.btn.btn-danger.mr-3#delArticle(type='button') 確定
@@ -63,7 +65,27 @@ block main
       });
       $('.article-btn').on('click', toggleArticle);
 
-      $('.delBtn').on('click', () => $('#deleteAlert').modal('show'));
+      $('.delBtn').on('click', function () {
+        $('#deleteAlert').modal('show')
+        $('#articleId').val($(this).attr('id'));
+      });
+
+      $('#delArticle').on('click', () => {
+        const token = '#{csrfToken}';
+        const location = window.location.href;
+        $.ajax({
+          method: 'POST',
+          type: 'POST',
+          url: `/forum/deleteArticle?_csrf=${token}`,
+          data: { articleId: $('#articleId').val() }
+        })
+          .always((msg) => {
+            alert(msg);
+            $('#screenMask').show();
+            window.location.replace(location);
+          });
+      });
+
       $('.reBtn').on('click', retractArticle);
     });
     

@@ -86,11 +86,12 @@ exports.regFormPost = [
       res.render('regForm',
         {
           title: '成為貓員',
-          member: req.body,
+          newMember: req.body,
           errors: errors.array()
         });
       return;
     }
+
     // after passing the validation
     let { name, email, pwd, confirmPwd } = req.body;
     Member
@@ -102,7 +103,7 @@ exports.regFormPost = [
           res.render('regForm',
             {
               title: '成為貓員',
-              member: { name, email, pwd, confirmPwd },
+              newMember: { name, email, pwd, confirmPwd },
               errors: [{ msg: '該貓員稱呼已使用 請變更稱呼' }]
             });
         } else {

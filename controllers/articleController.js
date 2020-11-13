@@ -132,6 +132,7 @@ exports.insertImgUpload = [
       res.send('img is already store to db!!');
     } catch (e) {
       console.log(e);
+      res.send(false);
     }
   }
 ];
@@ -152,5 +153,13 @@ exports.articleModify = (req, res, next) => {
     if (err) return next(err);
     oldArticle.content = oldArticle.content.replace(/\r?\n|\r/g, '');
     res.render('articleForm', { title: '發表文章', article: oldArticle, alreadyStore: true });
+  });
+};
+
+// delete article
+exports.articleDelete = (req, res) => {
+  Article.deleteOne({ _id: req.body.articleId }, (err) => {
+    if (err) res.send('文章刪除失敗...請稍後再試');
+    else res.send('文章刪除成功!!!');
   });
 };

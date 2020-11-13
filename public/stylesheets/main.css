@@ -57,11 +57,11 @@ ul {
 }
 */
 /* my page style definition */
-html {
-  font-size: 16px;
-}
 
 @media (max-width: 999px) {
+  html {
+    font-size: 12px;
+  }
   h2 {
     font-size: 1.5rem;
   }
@@ -71,6 +71,9 @@ html {
 }
 
 @media (min-width: 1000px) {
+  html {
+    font-size: 16px;
+  }
   h2 {
     font-size: 2.5rem;
   }
@@ -78,7 +81,6 @@ html {
     font-size: 1.8rem;
   }
 }
-
 
 *,
 *:before,
@@ -191,7 +193,7 @@ img.map, map area{
   background-color: transparent;
   /*box-shadow: 10px 10px 10px #999;*/
   padding: 5px 5px;
-  font-size: 2.8vmin;
+  font-size: 1.5rem;
   font-weight: bold;
   color: brown;
   cursor: pointer;
@@ -200,8 +202,11 @@ img.map, map area{
   outline: none;
 }
 .button:hover { 
-  font-size: 1.8em;
+  font-size: 2em;
   color: green; 
+}
+.pullLeft > .button {
+  cursor: none;
 }
 .button:active {
   color: greenyellow;
@@ -445,7 +450,7 @@ legend {
   width: 90%;
   height: 90%;
   overflow: auto;
-  overflow-x: hidden;
+  /*overflow-x: hidden;*/
   word-wrap: break-word;
   outline: none;
 }
@@ -665,4 +670,17 @@ table.table-bordered > tbody > tr > td {
 
 .imgUpload > .fas:nth-child(3) {
   font-size: 3rem;
+}
+
+#screenMask {
+  display: none;
+  position: fixed;
+  padding: 0;
+  margin: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:rgba(255,255,255,0.5);
+  z-index: 99999;
 }

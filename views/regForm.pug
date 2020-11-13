@@ -33,7 +33,7 @@ block main
             pattern="^[a-z A-Z 0-9]{5,10}"
             data-toggle="tooltip"
             title="請填入5~10位英文/數字組合"
-            value=(member===undefined ? '' : member.name) 
+            value=(newMember===undefined ? '' : newMember.name) 
             onfocus="this.value=''"
             required
           )
@@ -46,7 +46,7 @@ block main
             name="email"
             data-toggle="tooltip"
             title="請填入可使用信箱位址"
-            value=(member===undefined ? '' : member.email)
+            value=(newMember===undefined ? '' : newMember.email)
             onfocus="this.value=''"
             required
           )
@@ -60,7 +60,7 @@ block main
             pattern="[a-z A-Z 0-9]{8,30}" 
             data-toggle="tooltip"
             title="請填入8~30位英文/數字組合"
-            value=(member===undefined ? '' : member.pwd) 
+            value=(newMember===undefined ? '' : newMember.pwd) 
             onfocus="this.value=''"
             required
           )
@@ -73,7 +73,7 @@ block main
             name="confirmPwd"
             data-toggle="tooltip"
             title="請填入與密碼欄位相同的值"
-            value=(member===undefined ? '' : member.confirmPwd)
+            value=(newMember===undefined ? '' : newMember.confirmPwd)
             onfocus="this.value=''"
             required
           )
@@ -109,12 +109,18 @@ block main
       $('#picLabel').tooltip({placement: "right", trigger: "hover"});
       $('[data-toggle="tooltip"]').tooltip({placement: "right", trigger: "focus"});
 
-      $('#confirmPwd').prop('disabled', 'true');
-      $('#confTitle').toggleClass('disableField');
+      if (!$('#confirmPwd').val()) {
+        $('#confirmPwd').prop('disabled', 'true');
+        $('#confTitle').toggleClass('disableField');
+      }
+
+      for (let i = 1; i < $(':required').length; i += 1) {
+        if ($(':required').eq(i).val()) $(':required').eq(i).addClass('modified');
+      }
 
       // input第一次觸發事件時加入class
-      $(':required').one('blur keydown', function() {
-        $(this).addClass('modified');
+      $(':required').one('blur', function() {
+        if (!$(this).hasClass('modified')) $(this).addClass('modified');
       });
       $('#pwd').on('blur', unlockCPW);
       $("#confirmPwd").on('focus', setCpwPattern);
