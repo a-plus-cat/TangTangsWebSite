@@ -15,11 +15,14 @@ const upload = multer();
 
 
 // get publishing form
-exports.artcleFormGet = (req, res) => {
+exports.artcleFormGet = (req, res, next) => {
   if (req.user) res.render('articleForm', { title: '發表文章', article: '', alreadyStore: false });
   else {
     req.flash('failure', '發表文章之前 請先登入...');
-    res.redirect('/login');
+    req.session.save((err) => {
+      if (err) return next(err);
+      res.redirect('/login');
+    });
   }
 };
 
@@ -64,7 +67,11 @@ exports.artclePublish = [
         mdArticle.content = article;
         mdArticle.save((er) => {
           if (er) return next(err);
-          res.redirect('/forum');
+          req.flash('success', '修改文章已上傳');
+          req.session.save((error) => {
+            if (error) return next(error);
+            res.redirect('/forum');
+          });
         });
       });
     } else {
@@ -80,7 +87,11 @@ exports.artclePublish = [
               title,
               content: article
             });
-            res.redirect('/forum');
+            req.flash('success', '文章上傳成功!!!');
+            req.session.save((e) => {
+              if (e) return next(e);
+              res.redirect('/forum');
+            });
           } catch (e) {
             res.render('articleForm', {
               title: '發表文章',

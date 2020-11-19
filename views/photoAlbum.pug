@@ -28,7 +28,7 @@ block main
       .contentPage
     .hard.endBack
     .hard.endCover
-  .text-center.mt-5#albumControl
+  .text-center.mt-4#albumControl
     if member
       button.btn.btn-danger.mr-1#delPhotos(title='刪除圖片')
         i.fas &#xf2ed;
@@ -47,7 +47,7 @@ block main
           lable.input-group-text.fieldName(for='pages') 跳轉頁面
         div(style='position:relative')
           select.custom-select#pages(name='pages' data-live-search="true")
-            option(value='0') ---
+            option(value='-1') ---
             - for (let i = 1; i <= photoList.length; i += 1) 
               option(value=`${i}`) #{i}
   #screenMask
@@ -321,12 +321,12 @@ block main
           $(this).empty().append('<i class="fas">&#xf005;</i>');
           $(this).css('color', 'orange');
           $(this).attr('title', '取消書籤');
-          $('#pages > option').eq(pageNum - 1).text(`${pageNum}  🌟`);
+          $('#pages > option').eq(pageNum).text(`${pageNum}  🌟`);
         } else {
           $(this).empty().append('<i class="far">&#xf005;</i>');
           $(this).css('color', 'black');
           $(this).attr('title', '加入書籤');
-          $('#pages > option').eq(pageNum - 1).text(pageNum);
+          $('#pages > option').eq(pageNum).text(pageNum);
         }        
       });
 

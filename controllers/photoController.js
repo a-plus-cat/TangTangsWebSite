@@ -31,9 +31,12 @@ exports.photoAlbumGet = (req, res, next) => {
 };
 
 // get permission of upload photos
-exports.allowUpload = (req, res) => {
+exports.allowUpload = (req, res, next) => {
   req.flash('failure', '上傳相片之前 請先登入...');
-  res.redirect('/login');
+  req.session.save((err) => {
+    if (err) return next(err);
+    res.redirect('/login');
+  });
 };
 
 // get single photo
@@ -60,11 +63,14 @@ exports.photoPost = [
               break;
           }
         } else req.flash('failure', err);
-        res.redirect('/photoAlbum');
+        req.session.save((e) => {
+          if (e) return next(e);
+          res.redirect('/photoAlbum');
+        });
       } else next();
     });
   },
-  async (req, res) => {
+  async (req, res, next) => {
     try {
       const photos = req.files;
       // reduce photo size
@@ -80,16 +86,22 @@ exports.photoPost = [
         });
       }
       req.flash('success', '相片上傳成功!!!');
-      res.redirect('/photoAlbum');
+      req.session.save((err) => {
+        if (err) return next(err);
+        res.redirect('/photoAlbum');
+      });
     } catch (e) {
       req.flash('failure', '上傳發生錯誤...請重新嘗試');
-      res.redirect('/photoAlbum');
+      req.session.save((err) => {
+        if (err) return next(err);
+        res.redirect('/photoAlbum');
+      });
     }
   }
 ];
 
 // handle image upload by url
-exports.urlPost = (req, res) => {
+exports.urlPost = (req, res, next) => {
   const imgUrl = req.body.photo;
   const rule = /(^https:\/\/(?:[a-z0-9\-]+\.)+[a-z0-9]+\/(?:[^\s\/]+\/)*[^\\\/\:\?\*\"<>\|]+\.(?:jpg|jpeg|gif|png))(?:\?[^\?]*)?$/i;
   const validUrl = imgUrl.match(rule);
@@ -101,15 +113,24 @@ exports.urlPost = (req, res) => {
     }, (err) => {
       if (err) {
         req.flash('failure', '發生錯誤...請重新嘗試');
-        res.redirect('/photoAlbum');
+        req.session.save((e) => {
+          if (e) return next(e);
+          res.redirect('/photoAlbum');
+        });
       } else {
         req.flash('success', '相片連結建立成功!!!');
-        res.redirect('/photoAlbum');
+        req.session.save((er) => {
+          if (er) return next(er);
+          res.redirect('/photoAlbum');
+        });
       }
     });
   } else {
     req.flash('failure', '無效的相片連結...');
-    res.redirect('/photoAlbum');
+    req.session.save((err) => {
+      if (err) return next(err);
+      res.redirect('/photoAlbum');
+    });
   }
 };
 

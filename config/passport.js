@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable comma-dangle */
 // const passport = require('passport');
 const LocalStorage = require('passport-local').Strategy;
@@ -19,14 +20,14 @@ module.exports = (passport) => {
         (err, user) => {
           if (err) return done(err);
           if (!user) {
-            return done(null, false, req.flash('failure', '查無此貓員身份'));
+            return done(null, false, '查無此貓員身份');
           }
           handlePwd.compare(password, user.password, (error, correct) => {
             if (error) return done(error);
             if (correct) {
-              return done(null, user);
+              return done(null, user, `歡迎回來!!! ${user.name}`);
             }
-            return done(null, false, req.flash('failure', '驗證密碼錯誤'));
+            return done(null, false, '驗證密碼錯誤');
           });
         }
       );

@@ -1,6 +1,5 @@
 /* eslint-disable comma-dangle */
 const express = require('express');
-const passport = require('passport');
 const logController = require('../controllers/logController');
 const photoController = require('../controllers/photoController');
 const articleController = require('../controllers/articleController');
@@ -16,15 +15,7 @@ router.get('/', (req, res) => {
 // get request for login
 router.get('/login', logController.logFormGet);
 // post request for login
-router.post('/login',
-  passport.authenticate(
-    'local',
-    {
-      successRedirect: '/forum',
-      failureRedirect: '/login',
-      failureFlash: true
-    }
-  ));
+router.post('/login', logController.logIn);
 // get request for logout
 router.get('/logout', logController.logOut);
 // get request for register

@@ -48,6 +48,15 @@ block main
           .text-center.mt-3
             button.btn.btn-danger.mr-3#delArticle(type='button') 確定
             button.btn.btn-secondary.ml-3(type='button' data-dismiss='modal') 取消
+  .modal.fade#inform
+    .modal-dialog.modal-dialog-centered
+      .modal-content
+        .modal-header
+          h3.modal-title Tang-Tang の 通知
+        .modal-body
+          p#welcomeMsg #{success}
+        .modal-footer
+          button.btn.btn-primary(type='button' data-dismiss='modal') Close
   script.
     $(document).ready(function () {
       function toggleArticle() {
@@ -57,7 +66,8 @@ block main
       function retractArticle() {
         $(this).parents('.contentCeil').slideToggle();
       }
-      
+
+      if ($('#welcomeMsg').text()) $('#inform').modal('show')
       $('.article-btn').hide();
       $('.mainArea').css({
         'padding-top':'5%',

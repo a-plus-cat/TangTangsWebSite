@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable prefer-const */
 /* eslint-disable no-undef */
 /* eslint-disable object-curly-newline */
@@ -8,6 +9,7 @@
 /* eslint-disable func-names */
 const { body, validationResult } = require('express-validator');
 const multer = require('multer');
+const passport = require('passport');
 
 const upload = multer();
 const sharp = require('sharp');
@@ -37,14 +39,39 @@ exports.logFormGet = function (req, res) {
   res.render('logForm', { title: '貓員登入/註冊' });
 };
 
+// handle login on post
+exports.logIn = (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      req.flash('failure', info);
+      return req.session.save((e) => {
+        if (e) next(e);
+        else res.redirect('/login');
+      });
+    }
+    req.logIn(user, (error) => {
+      if (error) return next(error);
+      req.flash('success', info);
+      return req.session.save((er) => {
+        if (er) next(er);
+        else res.redirect('/forum');
+      });
+    });
+  })(req, res, next);
+};
+
 // handle logout on get
 exports.logOut = function (req, res) {
-  // show logout success message
-  if (req.user) req.flash('success', '你己經成功登出');
   // remove req.user property and clear login session
   req.logout();
+  // show logout success message
+  req.flash('success', '你己經成功登出');
   // redirect back to login page
-  res.redirect('/login');
+  req.session.save((err) => {
+    if (err) next(err);
+    else res.redirect('/login');
+  });
 };
 
 // get register form
@@ -125,9 +152,13 @@ exports.regFormPost = [
 
             // success to set a member account
             req.flash('success', '註冊成功 請先登入');
-            res.redirect('/login');
+            req.session.save((e) => {
+              if (e) return next(e);
+              res.redirect('/login');
+            });
           } catch (error) {
             res.redirect('/register');
+            console.log(error);
           }
         }
       });
@@ -192,7 +223,10 @@ exports.resetFormPost = [
             });
 
             req.flash('success', '驗證信件寄出 請至信箱確認');
-            res.redirect('/login');
+            req.session.save((e) => {
+              if (e) return next(e);
+              res.redirect('/login');
+            });
           } catch (error) {
             res.redirect('/resetPwd');
             console.log(error);
@@ -265,7 +299,10 @@ exports.postSetPwd = [
           member.save((error) => {
             if (error) return next(error);
             req.flash('success', '密碼修改成功 請重新登入');
-            res.redirect('/login');
+            req.session.save((e) => {
+              if (e) return next(e);
+              res.redirect('/login');
+            });
           });
         } catch (e) { res.redirect('/resetPwd'); }
       });

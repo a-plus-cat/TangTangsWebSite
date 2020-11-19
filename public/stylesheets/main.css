@@ -583,6 +583,14 @@ legend {
   }
 }
 
+#welcomeMsg {
+  font-family: 'Microsoft JhengHei';
+  color: #246A24;
+  font-weight: bold;
+  font-size: 1.6rem;
+
+}
+
 .article-btn {
   width: 80%;
   height: 3rem !important;

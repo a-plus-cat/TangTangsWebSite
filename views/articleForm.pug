@@ -140,22 +140,22 @@ block main
           button.btn.btn-success#insertComfirm(type='button' data-dismiss='modal') 插入圖片
 
   script.
+    function populateContent() {
+      if (!$('#writeField').html()) {
+        $('#emptyAlert').html('<b>文章尚未填寫!!!</b>');
+        $('#alert').modal('show');
+        return false;
+      }
+      // populate the textarea with user's edited content
+      $('#article').val($('#writeField').html());
+      return true;
+    }
+
     $(document).ready(function () {
       let fontColorValue = null;
       let bgColorValue = null;
       let fontSizeValue = null;
       let insertImgSrc = '';
-
-      function populateContent() {
-        if (!$('#writeField').html()) {
-          $('#emptyAlert').html('<b>文章尚未填寫!!!</b>');
-          $('#alert').modal('show');
-          return false;
-        }
-        // populate the textarea with user's edited content
-        $('#article').val($('#writeField').html());
-        return true;
-      }
 
       function findSelectIndex(range) {
         const childList = $('#writeField').children();

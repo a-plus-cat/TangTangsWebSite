@@ -49,7 +49,7 @@ function moveGlass(event) {
   glassCss['background-position'] = `23.5vw ${35 + buttonIndex * 6}vh, 20vw 36vh `;
 }
 
-// --fix---
+// show articles of specific catagory
 function showContent(event, c) {
   $(event.target.parentNode).hide();
   const category = c;
@@ -258,11 +258,9 @@ function removeStyle(range, cmd) {
   // remove the particular tag or all of tag('*')
   const rmStyle = cmd || '*';
   let target;
-  // fix
   const contentNum = range.cloneContents().childNodes.length;
   let checkPtr = range.startContainer.nodeName === 'DIV' ? $(range.startContainer).contents().get(range.startOffset) : range.startContainer;
-  //let checkPtr = range.startContainer === range.endContainer && contentNum > 1
-  //  ? $(range.startContainer).contents().get(range.startOffset) : range.startContainer;
+
   let noNeedRm;
   for (let i = 0; i < contentNum; i += 1) {
     if ((checkPtr.nodeType === 3 || checkPtr.nodeName === 'IMG') && checkPtr.parentNode.nodeName === 'DIV') {
@@ -312,7 +310,7 @@ function removeStyle(range, cmd) {
   // remove all/those particular tags inside target
   if (rmObj.length) {
     rmObj.contents().unwrap();
-    //target.normalize();
+    // target.normalize();
     if (rmStyle !== '*') finishLoop = true;
   } else if (rmStyle !== '*' && !$(target).parents(rmStyle).length) {
     finishLoop = true;
@@ -398,28 +396,9 @@ function changeStyle(cmd, prop, value) {
 
     // check if the selection is inside contenteditable area
     if (!area.contains(current) || !area.contains(endEle)) continue;
-    /*
-    // check if the selection contains image
-    if (current.nodeType !== 3) {
-      current = $(current).contents().get(startIndex);
-      startIndex = 0;
-    }
-    if (endEle.nodeType !== 3) {
-      endEle = $(endEle).contents().get(endIndex - 1);
-      endIndex = 0;
-    }
 
-    /*
-    if (current === endEle && !startIndex && !endIndex) {
-      if (current.nodeType === 3) endIndex = current.textContent.length;
-      else {
-        endIndex = current.childNodes.length;
-        atEnd = true;
-      }
-    }
-    */
-    //alert(`B1-${current.nodeName}-${current.textContent}--${startIndex}`);
-    //alert(`B2-${endEle.nodeName}-${endEle.textContent}--${endIndex}`);
+    // alert(`B1-${current.nodeName}-${current.textContent}--${startIndex}`);
+    // alert(`B2-${endEle.nodeName}-${endEle.textContent}--${endIndex}`);
 
     // adjust range for not manual selection
     if (current.nodeType === 1 && startIndex !== current.textContent.length) {
@@ -431,8 +410,8 @@ function changeStyle(cmd, prop, value) {
       endIndex = endEle.nodeType === 3 ? endEle.length : endEle.childNodes.length;
     }
 
-    //alert(`B3-${current.nodeName}-${current.textContent}--${startIndex}`);
-    //alert(`B4-${endEle.nodeName}-${endEle.textContent}--${endIndex}`);
+    // alert(`B3-${current.nodeName}-${current.textContent}--${startIndex}`);
+    // alert(`B4-${endEle.nodeName}-${endEle.textContent}--${endIndex}`);
 
     // reset the range end to more precise position
     if (endEle.nodeType === 1 && endIndex && endIndex === endEle.childNodes.length) atEnd = true;
@@ -533,42 +512,42 @@ function changeStyle(cmd, prop, value) {
           so = startIndex ? $(sc).contents().index(current) + 1 : $(sc).contents().index(current);
         }
         if (atEnd && c2 && c4) { // merge to the node behind endEle
-          //mergeBehind = true;
-          //ec = [nextE.parentNode, $(nextE.parentNode).contents().index(endEle)];
           ec = nextE.firstChild;
           eo = 0;
-          //alert(`a. ec: ${ec.nodeName}-${ec.textContent}-----${eo}`)
         } else {
-          // fix
           if (($(endEle).parents().is(cmd) && (!prop || $(endEle).parents('span').filter(`[style="${prop}: ${value};"]`).length))) {
             ec = endEle;
             eo = endIndex;
-            //alert(`b. ec: ${ec.nodeName}-${ec.textContent}---${eo}`);
           } else {
-            if ($(current).parents('div').get(0) === $(endEle).parents('div').get(0) && ec.contains(current)) eo = $(ec).contents().index(endEle) + 1;
-            else eo = 1;
-            //alert(`c. ec: ${ec.nodeName}-${ec.textContent}---${eo}`);
+            if ($(current).parents('div').get(0) === $(endEle).parents('div').get(0) && ec.contains(current)) {
+              eo = $(ec).contents().index(endEle) + 1;
+            } else eo = 1;
           }
         }
       }
     }
 
-    //alert(`A1-${range.startContainer.nodeName}-${range.startContainer.textContent}--${range.startOffset}`);
-    //alert(`A2-${range.endContainer.nodeName}-${range.endContainer.textContent}--${range.endOffset}`);
-    //alert(isToggle);
-    //alert(`B5-${current.nodeName}-${current.textContent}--${startIndex}`);
-    //alert(`B6-${endEle.nodeName}-${endEle.textContent}--${endIndex}`);
+    // alert(`A1-${range.startContainer.nodeName}-${range.startContainer.textContent}--${range.startOffset}`);
+    // alert(`A2-${range.endContainer.nodeName}-${range.endContainer.textContent}--${range.endOffset}`);
+    // alert(isToggle);
+    // alert(`B5-${current.nodeName}-${current.textContent}--${startIndex}`);
+    // alert(`B6-${endEle.nodeName}-${endEle.textContent}--${endIndex}`);
+
     // change style for range part by part
     while (!finish) {
       const subRange = document.createRange();
       // set the subRange by choosing all siblings of current(element/text node)
       subRange.setStart(current, startIndex);
-      //alert(`a-0 ${current.nodeName} +'---' + ${current.textContent}`);
-      //alert(`${endEle.nodeName}--${endEle.textContent}---${endEle.parentNode.nodeName}-${endEle.parentNode.textContent}`);
+
+      // alert(`a-0 ${current.nodeName} +'---' + ${current.textContent}`);
+      // alert(`${endEle.nodeName}--${endEle.textContent}---${endEle.parentNode.nodeName}-${endEle.parentNode.textContent}`);
+
       while (current.nextSibling && !current.contains(endEle)) {
         current = current.nextSibling;
       }
-      //alert(`a-1 ${current.nodeName} +'---' + ${current.textContent}`);
+
+      // alert(`a-1 ${current.nodeName} +'---' + ${current.textContent}`);
+
       // set the subRange's end and set current to the next subRange's start
       if (current.contains(endEle)) {
         if (current === endEle) {
@@ -595,9 +574,10 @@ function changeStyle(cmd, prop, value) {
       if (subRange.endContainer.nodeName === 'IMG') {
         subRange.setEnd(subRange.endContainer.parentNode, $(subRange.endContainer.parentNode).contents().index(subRange.endContainer) + 1);
       }
-      //alert(`a-2 ${current.nodeName} +'---' + ${current.textContent}`);
-      //alert(`C1. ${subRange.startContainer.nodeName}-${subRange.startContainer.textContent}--${subRange.startOffset}`);
-      //alert(`C2. ${subRange.endContainer.nodeName}-${subRange.endContainer.textContent}--${subRange.endOffset}`);
+
+      // alert(`a-2 ${current.nodeName} +'---' + ${current.textContent}`);
+      // alert(`C1. ${subRange.startContainer.nodeName}-${subRange.startContainer.textContent}--${subRange.startOffset}`);
+      // alert(`C2. ${subRange.endContainer.nodeName}-${subRange.endContainer.textContent}--${subRange.endOffset}`);
 
       /* determine to add/remove style according to the status of the parameter(cmd)
          and the flag(isToggle) */
@@ -608,8 +588,8 @@ function changeStyle(cmd, prop, value) {
       startIndex = 0;
     } // end while
 
-    //alert(`D1. ${range.startContainer.nodeName}-${range.startContainer.textContent}--${range.startOffset}`);
-    //alert(`D2. ${range.endContainer.nodeName}-${range.endContainer.textContent}--${range.endOffset}`);
+    // alert(`D1. ${range.startContainer.nodeName}-${range.startContainer.textContent}--${range.startOffset}`);
+    // alert(`D2. ${range.endContainer.nodeName}-${range.endContainer.textContent}--${range.endOffset}`);
 
     // preserve selection after content modified
     const reselectModify = document.createRange();
@@ -621,8 +601,10 @@ function changeStyle(cmd, prop, value) {
     if (cmd && !isToggle) {
       const renewSc = mergeBefore ? $(sc[0]).contents().get(sc[1]) : sc;
       const renewEc = mergeBehind ? $(ec[0]).contents().get(ec[1]) : ec;
-      //alert('start' + renewSc.nodeName + '--' + renewSc.textContent + '----' + so);
-      //alert('end' + renewEc.nodeName + '--' + renewEc.textContent + '----' + eo);
+
+      // alert('start' + renewSc.nodeName + '--' + renewSc.textContent + '----' + so);
+      // alert('end' + renewEc.nodeName + '--' + renewEc.textContent + '----' + eo);
+
       reselectModify.setStart(renewSc, so);
       reselectModify.setEnd(renewEc, eo);
     } else {
