@@ -47,12 +47,14 @@ block main
           lable.input-group-text.fieldName(for='pages') 跳轉頁面
         div(style='position:relative')
           select.custom-select#pages(name='pages' data-live-search="true")
-            option(value='-1') ---
+            option(value='-1') 封面
             - for (let i = 1; i <= photoList.length; i += 1) 
               option(value=`${i}`) #{i}
+            option(value=`${photoList.length + 2 + photoList.length % 2}`) 封底
   #screenMask
-    span.spinner-border.text-primary(style='width:4rem;height:4rem;')
-    span.display-1#loadingMsg  圖片加載中.....
+    .d-flex.justify-content-center.align-items-center(style='height:100%;')
+      span.spinner-border.text-primary(style='width:4rem;height:4rem;')
+      span.display-1#loadingMsg  圖片加載中.....
   .modal#photoAlert
     .modal-dialog.modal-dialog-centered
       .modal-content
@@ -180,6 +182,8 @@ block main
             data: delIdStr
           })
           .done((data) => {
+            $('#screenMask').empty();
+            $('#screenMask').show();
             if (data) alert('相片刪除成功!!!');
             else alert('相片刪除失敗...請稍後再試');
             window.location.replace(location);
@@ -253,13 +257,12 @@ block main
         if ($('#localPaste').hasClass('active')) {
           if ($('#photos').get(0).files.length) {
             $('#uploadNotice').html(processMsg);
+            $('#screenMask').empty()
             $('#screenMask').show();
-            $('#screenMask').children().hide();
             $('#photoUpload').submit();
           } else alert('請選擇上傳圖檔!!!');
         } else {
           $('#screenMask').show();
-          $('#screenMask').children().hide();
           $('#urlUpload').submit();
         }
       });
