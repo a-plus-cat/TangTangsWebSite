@@ -8,6 +8,7 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable func-names */
 const { body, validationResult } = require('express-validator');
+const path = require('path');
 const multer = require('multer');
 const passport = require('passport');
 
@@ -139,6 +140,10 @@ exports.regFormPost = [
             const salt = await bcrypt.genSalt();
             const hash = await bcrypt.hash(pwd, salt);
             // handle userIcon
+            const rule = /jpeg|jpg|png|gif/;
+            const checkExtend = rule.test(path.extname(req.file.originalname).toLowerCase());
+            const checkMime = rule.test(req.file.mimetype);
+            if (!checkExtend || !checkMime) throw new Error('上傳檔案非圖片類型!!!');
             const picBuffer = await sharp(req.file.buffer)
               .resize({ width: 120, height: 120 })
               .toBuffer();
@@ -157,8 +162,11 @@ exports.regFormPost = [
               res.redirect('/login');
             });
           } catch (error) {
-            res.redirect('/register');
-            console.log(error);
+            req.flash('failure', error.message);
+            req.session.save((e) => {
+              if (e) return next(e);
+              res.redirect('/register');
+            });
           }
         }
       });

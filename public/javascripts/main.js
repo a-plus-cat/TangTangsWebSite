@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable max-len */
 /* eslint-disable no-lonely-if */
 /* eslint-disable no-continue */
@@ -83,10 +84,13 @@ function readURL(input) {
   if (input.files && input.files[0]) {
     const reader = new FileReader();
     reader.onload = function (e) {
-      const img = $('#picBlock').get(0);
-      $(img).css('background-image', `url(${e.target.result})`);
+      $('#picBlock').css('background-image', `url(${e.target.result})`);
     };
-    reader.readAsDataURL(input.files[0]);
+
+    if (!input.files[0].type.startsWith('image/')) {
+      $('#picBlock').css('background-image', "url('../images/noImage.png')");
+      alert('錯誤的頭像格式!!! 請重新選擇');
+    } else reader.readAsDataURL(input.files[0]);
   }
 }
 

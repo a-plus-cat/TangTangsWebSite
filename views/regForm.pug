@@ -89,7 +89,9 @@ block main
         .modal-body
           if errors
             each err in errors
-              p #{err.msg}
+              p ⚠️ #{err.msg}
+          else if failure.toString()
+            p ⚠️ #{failure}
           else 
             p(style="font-family: 'Microsoft JhengHei';") 
               | 所有欄位皆為
