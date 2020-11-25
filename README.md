@@ -1,5 +1,4 @@
 # TangTangsWebSite
-#
 ## 📜 Preface
 This is my first time to learn by myself and build the website step by step.  
 After thinking for a long time, finally there is a clear picture in my head.  
@@ -17,7 +16,7 @@ This website is built by web application framework "Express", and uses view engi
 In server side, I use "mongoDB" cloud database to store data of the interaction between server and client.
 * * *
 Here are some node modules used in this project.
-module name | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; description
+module name | description
  :-: | - 
 express-session | Store client status in session which is in server 
 express-validator | vaildate some form fields on the server side 
@@ -36,58 +35,57 @@ nodemailer | Automatically send email with authorized link to user who wants to 
 * * *
 ### Function description
 - #### login / logout
-  Member needs to insert account name and password to login. The field of account name is masked by module input-mask to filter non-alphabetic and non-numeric characters.
-  💠 *display operation*
-  ![function: register](https://i.imgur.com/4hhS0WQ.gif)
+  Member needs to insert account name and password to login. The field of account name is masked by module input-mask to filter non-alphabetic and non-numeric characters.\
+  💠 *display operation*\
+  ![function: register](https://i.imgur.com/x3DuquT.gif)
 
 - #### register
-  User needs to fill up every field which is compliant with what the tip required for, and the symbol at right side of each field means the result of immediate validating.
-  ⚠️ **There will be an alert if the file for user icon isn't the type of image.**
-  💠 *display operation*
-  ![function: register](https://i.imgur.com/SegqUNF.gif)
+  User needs to fill up every field which is compliant with what the tip required for, and the symbol at right side of each field means the result of immediate validating.\
+  ⚠️ **There will be an alert if the file for user icon isn't the type of image.**\
+  💠 *display operation*\
+  ![function: register](https://i.imgur.com/d67Jt9p.gif)
 
 - #### text editor
-  To build this editor, I don't use the API ~~"document.execCommand"~~ but use the function "changeStyle" which is written by myself. It's a challenge for me to write such a function which works just like "document.execCommand". After a plenty debugging time, I think it could run pretty good now. 
-  
-  This editor provide some common text editting command such as bold, italic, underline, delete line, font-size, font-color, highlight, text-align, indent, outdent, style removeing, image inserting.
-  ⚠️ **There will be an alert if the inserting file isn't the type of image.**
-  For users, it is quite convenient to keep the selections after changing the style, and this text editor can do so. 
-  💠 *display operation*
-  ![function: textEditor](https://i.imgur.com/wylaf98.gif)
+  To build this editor, I don't use the API ~~"document.execCommand"~~ but use the function "changeStyle" which is written by myself. It's a challenge for me to write such a function which works just like "document.execCommand". After a plenty debugging time, I think it could run pretty good now.\
+  This editor provide some common text editting command such as bold, italic, underline, delete line, font-size, font-color, highlight, text-align, indent, outdent, style removeing, image inserting.\
+  ⚠️ **There will be an alert if the inserting file isn't the type of image.**\
+  For users, it is quite convenient to keep the selections after changing the style, and this text editor can do so.\
+  💠 *display operation*\
+  ![function: textEditor](https://i.imgur.com/qyl00GP.gif)
 
 - #### message board
-  All user can browse all articles by catagory here, but only authors can modify and delete their publications.
-  ⚠️ **Only in the login state and being the publisher that deleting and modifying buttons will be displayed**.
-  💠 *display operation*
-  ![function: message board](https://i.imgur.com/8SrAPx9.gif)
+  All user can browse all articles by catagory here, but only authors can modify and delete their publications.\
+  ⚠️ **Only in the login state and being the publisher that deleting and modifying buttons will be displayed**.\
+  💠 *display operation*\
+  ![function: message board](https://i.imgur.com/hIWefu4.gif)
 
 - #### photo album
   🙂 Thanks to "turn.js".  I can build a pretty flipbook easily. 🙂
 
   ##### 📖 &nbsp; turn page
-  User can just click the blank of the page or the button to turn pages, and also use the drop list button to go to the specific page.
-  Users can click the star mark to record the page so that later they can quickly go back.
-  💠 *display operation*
-  ![function: turn page](https://i.imgur.com/tgqU4b9.gif)
+  User can just click the blank of the page or the button to turn pages, and also use the drop list button to go to the specific page.\
+  Users can click the star mark to record the page so that later they can quickly go back.\
+  💠 *display operation*\
+  ![function: turn page](https://i.imgur.com/gTS8KMA.gif)
 
   ##### 📂 &nbsp; upload photo in local
-  Only members can upload photos in local directory.
-  ⚠️ **Upload up to 5 photos once a time and each photo size is 10mb or less.**
-  ⚠️ **The inserting file should be the type of image.**
-  💠 *display operation*
-  ![function: upload in local](https://i.imgur.com/V2galuy.gif)
+  Only members can upload photos in local directory.\
+  ⚠️ **Upload up to 5 photos once a time and each photo size is 10mb or less.**\
+  ⚠️ **The inserting file should be the type of image.**\
+  💠 *display operation*\
+  ![function: upload in local](https://i.imgur.com/QijTFfF.gif)
   
   ##### 🌏 &nbsp; upload photo by URL
-  Only members can upload photos by URL.
-  ⚠️ **The acceptable URL is not only the https protocol, but also links to actual images**
-  💠 *display operation*
-  ![function: upload by URL](https://i.imgur.com/AgaHXzF.gif)
+  Only members can upload photos by URL.\
+  ⚠️ **The acceptable URL is not only the https protocol, but also links to actual images**\
+  💠 *display operation*\
+  ![function: upload by URL](https://i.imgur.com/NQbvIiZ.gif)
   
   ##### ✂ &nbsp; delete photo
-  Only members can delete photo.
-  The steps for deleting photos:
-  First, click scissors icon to cut out the photo.
-  Second, click garbage can icon button to delete the photo.
-  ⚠️ **Only in the login state and being the photo publisher that scissors icon will be displayed**.
-  💠 *display operation*
-  ![function: delete photo](https://i.imgur.com/cpwwLKs.gif)
+  Only members can delete photo.\
+  The steps for deleting photos:\
+  First, click scissors icon to cut out the photo.\
+  Second, click garbage can icon button to delete the photo.\
+  ⚠️ **Only in the login state and being the photo publisher that scissors icon will be displayed**.\
+  💠 *display operation*\
+  ![function: delete photo](https://i.imgur.com/77EAlFS.gif)
