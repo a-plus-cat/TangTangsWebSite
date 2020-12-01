@@ -11,7 +11,6 @@ const router = express.Router();
 router.get('/', (req, res) => {
   res.render('homePage', { title: 'TangTang の record' });
 });
-
 // get request for login
 router.get('/login', logController.logFormGet);
 // post request for login

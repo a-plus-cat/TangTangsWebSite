@@ -1,134 +1,13 @@
 /* eslint-disable no-alert */
-/* eslint-disable max-len */
+/* eslint-disable quote-props */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable comma-dangle */
+/* eslint-disable no-unused-vars */
+/* eslint-disable func-names */
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-lonely-if */
 /* eslint-disable no-continue */
-/* eslint-disable prefer-rest-params */
 /* eslint-disable no-undef */
-/* eslint-disable func-names */
-/* eslint-disable default-case */
-/* eslint-disable no-unused-vars */
-
-// let appearContent = null;
-
-// show current time
-function currentTime() {
-  const title = document.getElementById('time');
-  const cTime = new Date();
-  const timeString = cTime.toLocaleString();
-  const toWeek = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-  const output = timeString.replace(' ', ` ${toWeek[cTime.getDay()]} `);
-  title.innerText = `🕰 ${output} 🕰`;
-  setTimeout(currentTime, 1000);
-}
-
-// show list
-function listOpen(event, page) {
-  if (window.location.pathname !== page) {
-    window.location.pathname = page;
-  } else {
-    $(event.target.parentNode).find('div:visible').hide();
-    const listNum = event.target.id[5];
-    $(`#list${listNum}`).show();
-  }
-}
-
-// close list
-function listClose(event) {
-  $(event.target.parentNode).hide();
-}
-
-// Animation about the magnifier following the movement of the mouse
-function moveGlass(event) {
-  const buttons = Array.from(event.target.parentNode.children);
-  const buttonIndex = buttons.indexOf(event.target);
-  const glassCss = event.target.parentNode.style;
-
-  // 取消動畫填充模式-->讓js可在變動元素的style
-  glassCss['animation-fill-mode'] = 'none';
-
-  // 根據滑鼠位於第...個按鈕動態變更放大鏡當前位置
-  glassCss['background-position'] = `23.5vw ${35 + buttonIndex * 6}vh, 20vw 36vh `;
-}
-
-// show articles of specific catagory
-function showContent(event, c) {
-  $(event.target.parentNode).hide();
-  const category = c;
-  $('.article-btn, .contentCeil').hide();
-  $(`.${category}`).show();
-}
-
-// the original dimension of image map
-let previousWidth = 343;
-// refresh image map's coordinate
-function resetMap() {
-  const mapArea = document.getElementById('map_ID').getElementsByTagName('area');
-  const coordNum = [];
-  // 計算圖片reize後的縮放比例
-  const scale = document.getElementById('img_ID').offsetWidth / previousWidth;
-  // 將area座標字串拆分
-  for (let i = 0; i < mapArea.length; i += 1) coordNum[i] = mapArea[i].coords.split(',');
-  // 利用縮放比例更新map座標值
-  for (let x = 0; x < mapArea.length; x += 1) {
-    // 計算新座標值
-    for (let y = 0; y < coordNum[x].length; y += 1) coordNum[x][y] *= scale;
-    // 更新新座標值
-    mapArea[x].coords = coordNum[x].join(',');
-  }
-  // map圖片舊寬度更新為現有尺寸
-  previousWidth = document.getElementById('img_ID').offsetWidth;
-}
-
-// preview upload picture
-function readURL(input) {
-  if (input.files && input.files[0]) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      $('#picBlock').css('background-image', `url(${e.target.result})`);
-    };
-
-    if (!input.files[0].type.startsWith('image/')) {
-      $('#picBlock').css('background-image', "url('../images/noImage.png')");
-      alert('錯誤的頭像格式!!! 請重新選擇');
-    } else reader.readAsDataURL(input.files[0]);
-  }
-}
-
-// set the field's pattern of confirm pwd
-function setCpwPattern() {
-  const cpwPattern = $('#pwd').val();
-  $('#confirmPwd').attr('pattern', cpwPattern);
-}
-
-// unlock the field of confirm pwd
-function unlockCPW() {
-  const pwValidity = document.getElementById('pwd').checkValidity();
-  $('#confirmPwd').val('');
-  const before = $('#confirmPwd').prop('disabled');
-  $('#confirmPwd').prop('disabled', !pwValidity);
-  if (before !== !pwValidity) $('#confTitle').toggleClass('disableField');
-}
-
-// play the animation of putting a seal on
-function stampAni() {
-  const fieldName = ['userIcon', 'name', 'email', 'pwd', 'confirmPwd'];
-  // 確認表單填寫完整
-  for (let i = 0; i < fieldName.length; i += 1) {
-    const ele = $(`#${fieldName[i]}`).get(0);
-    if (!ele.checkValidity()) {
-      if (i === 0) $('#picLabel').tooltip('show');
-      else $(`#${fieldName[i]}`).tooltip('show');
-      return;
-    }
-  }
-
-  // 顯示蓋印動畫
-  $('#stamp').css('display', 'block');
-  // 延後1秒進行表單傳送
-  setTimeout(() => {
-    $('form').submit();
-  }, 500);
-}
 
 /* text editor's functions */
 // check if the selection is already added style
@@ -154,7 +33,6 @@ function checkStyle(select, cmd) {
     If both are the same, then return true
     otherwise return false
   */
-
   const content = range.cloneContents().childNodes;
   const textCount = range.toString().length;
   const commonAnc = range.commonAncestorContainer;
@@ -284,8 +162,9 @@ function removeStyle(range, cmd) {
   */
   if (range.startContainer === range.endContainer && range.startContainer.nodeType !== 3) {
     if (range.startContainer.nodeName !== 'DIV') target = range.startContainer;
-    else if ((range.endOffset - range.startOffset) === 1) target = $(range.startContainer).contents().get(range.startOffset);
-    else {
+    else if ((range.endOffset - range.startOffset) === 1) {
+      target = $(range.startContainer).contents().get(range.startOffset);
+    } else {
       target = !cmd ? document.createElement('span') : document.createElement(rmStyle);
       $(target).html(range.extractContents());
       range.insertNode(target);
@@ -401,21 +280,16 @@ function changeStyle(cmd, prop, value) {
     // check if the selection is inside contenteditable area
     if (!area.contains(current) || !area.contains(endEle)) continue;
 
-    // alert(`B1-${current.nodeName}-${current.textContent}--${startIndex}`);
-    // alert(`B2-${endEle.nodeName}-${endEle.textContent}--${endIndex}`);
-
     // adjust range for not manual selection
     if (current.nodeType === 1 && startIndex !== current.textContent.length) {
-      current = $(current).contents().length !== startIndex ? $(current).contents().get(startIndex) : current.nextSibling;
+      current = $(current).contents().length !== startIndex
+        ? $(current).contents().get(startIndex) : current.nextSibling;
       startIndex = 0;
     }
     if (endEle.nodeType === 1 && endIndex !== 0) {
       endEle = $(endEle).contents().get(endIndex - 1);
       endIndex = endEle.nodeType === 3 ? endEle.length : endEle.childNodes.length;
     }
-
-    // alert(`B3-${current.nodeName}-${current.textContent}--${startIndex}`);
-    // alert(`B4-${endEle.nodeName}-${endEle.textContent}--${endIndex}`);
 
     // reset the range end to more precise position
     if (endEle.nodeType === 1 && endIndex && endIndex === endEle.childNodes.length) atEnd = true;
@@ -471,7 +345,7 @@ function changeStyle(cmd, prop, value) {
     }
 
     // preserve selection
-    let sc; let so; let ec; let eo; let tempContainer;
+    let sc; let so; let ec; let eo;
 
     if (cmd && !isToggle) { // for adding style
       const preC = current.previousSibling;
@@ -491,7 +365,8 @@ function changeStyle(cmd, prop, value) {
           mergeBehind = true; // not really mean merge but for the same format of sc and ec
         } else if (atEnd && c2 && c4) { // merge to the node behind endEle
           mergeBehind = true;
-          sc = [sc, current.nodeType === 3 && startIndex ? $(sc).contents().index(current) + 1 : $(sc).contents().index(current)];
+          sc = [sc, current.nodeType === 3 && startIndex
+            ? $(sc).contents().index(current) + 1 : $(sc).contents().index(current)];
           so = 0;
           mergeBefore = true; // not really mean merge but for the same format of sc and ec
         } else { // no merge
@@ -531,26 +406,15 @@ function changeStyle(cmd, prop, value) {
       }
     }
 
-    // alert(`A1-${range.startContainer.nodeName}-${range.startContainer.textContent}--${range.startOffset}`);
-    // alert(`A2-${range.endContainer.nodeName}-${range.endContainer.textContent}--${range.endOffset}`);
-    // alert(isToggle);
-    // alert(`B5-${current.nodeName}-${current.textContent}--${startIndex}`);
-    // alert(`B6-${endEle.nodeName}-${endEle.textContent}--${endIndex}`);
-
     // change style for range part by part
     while (!finish) {
       const subRange = document.createRange();
       // set the subRange by choosing all siblings of current(element/text node)
       subRange.setStart(current, startIndex);
 
-      // alert(`a-0 ${current.nodeName} +'---' + ${current.textContent}`);
-      // alert(`${endEle.nodeName}--${endEle.textContent}---${endEle.parentNode.nodeName}-${endEle.parentNode.textContent}`);
-
       while (current.nextSibling && !current.contains(endEle)) {
         current = current.nextSibling;
       }
-
-      // alert(`a-1 ${current.nodeName} +'---' + ${current.textContent}`);
 
       // set the subRange's end and set current to the next subRange's start
       if (current.contains(endEle)) {
@@ -573,15 +437,13 @@ function changeStyle(cmd, prop, value) {
       if (subRange.endContainer !== endEle) endLength -= subRange.toString().length;
 
       if (subRange.startContainer.nodeName === 'IMG') {
-        subRange.setStart(subRange.startContainer.parentNode, $(subRange.startContainer.parentNode).contents().index(subRange.startContainer));
+        subRange.setStart(subRange.startContainer.parentNode,
+          $(subRange.startContainer.parentNode).contents().index(subRange.startContainer));
       }
       if (subRange.endContainer.nodeName === 'IMG') {
-        subRange.setEnd(subRange.endContainer.parentNode, $(subRange.endContainer.parentNode).contents().index(subRange.endContainer) + 1);
+        subRange.setEnd(subRange.endContainer.parentNode,
+          $(subRange.endContainer.parentNode).contents().index(subRange.endContainer) + 1);
       }
-
-      // alert(`a-2 ${current.nodeName} +'---' + ${current.textContent}`);
-      // alert(`C1. ${subRange.startContainer.nodeName}-${subRange.startContainer.textContent}--${subRange.startOffset}`);
-      // alert(`C2. ${subRange.endContainer.nodeName}-${subRange.endContainer.textContent}--${subRange.endOffset}`);
 
       /* determine to add/remove style according to the status of the parameter(cmd)
          and the flag(isToggle) */
@@ -591,9 +453,6 @@ function changeStyle(cmd, prop, value) {
 
       startIndex = 0;
     } // end while
-
-    // alert(`D1. ${range.startContainer.nodeName}-${range.startContainer.textContent}--${range.startOffset}`);
-    // alert(`D2. ${range.endContainer.nodeName}-${range.endContainer.textContent}--${range.endOffset}`);
 
     // preserve selection after content modified
     const reselectModify = document.createRange();
@@ -605,10 +464,6 @@ function changeStyle(cmd, prop, value) {
     if (cmd && !isToggle) {
       const renewSc = mergeBefore ? $(sc[0]).contents().get(sc[1]) : sc;
       const renewEc = mergeBehind ? $(ec[0]).contents().get(ec[1]) : ec;
-
-      // alert('start' + renewSc.nodeName + '--' + renewSc.textContent + '----' + so);
-      // alert('end' + renewEc.nodeName + '--' + renewEc.textContent + '----' + eo);
-
       reselectModify.setStart(renewSc, so);
       reselectModify.setEnd(renewEc, eo);
     } else {
@@ -619,7 +474,8 @@ function changeStyle(cmd, prop, value) {
         defaultSo = 0;
       }
 
-      const startPtr = defaultSc.nodeType === 1 ? $(defaultSc).contents().get(defaultSo) : defaultSc;
+      const startPtr = defaultSc.nodeType === 1
+        ? $(defaultSc).contents().get(defaultSo) : defaultSc;
       const firstHalf = document.createRange();
 
       if (!cmd) {
@@ -693,5 +549,267 @@ function changeStyle(cmd, prop, value) {
   // restore selection
   select.removeAllRanges();
   for (let z = 0; z < selectStore.length; z += 1) select.addRange(selectStore[z]);
-  // alert($('#writeField').html());
 }
+
+function populateContent() {
+  if (!$('#writeField').html()) {
+    $('#emptyAlert').html('<b>文章尚未填寫!!!</b>');
+    $('#alert').modal('show');
+    return false;
+  }
+  // populate the textarea with user's edited content
+  $('#article').val($('#writeField').html());
+  return true;
+}
+
+$(document).ready(function () {
+  let fontColorValue = null;
+  let bgColorValue = null;
+  let fontSizeValue = null;
+  let insertImgSrc = '';
+
+  function findSelectIndex(range) {
+    const childList = $('#writeField').children();
+    let s = null;
+    let e = null;
+    for (let i = 0; i < childList.length; i += 1) {
+      if (childList[i].contains(range.startContainer)) {
+        s = i;
+      }
+      if (childList[i].contains(range.endContainer)) {
+        e = i;
+        break;
+      }
+    }
+    return { startIndex: s, endIndex: e };
+  }
+
+  function moveContent(method, value) {
+    const select = window.getSelection();
+    const rangeArr = [];
+    let startIndex;
+    let endIndex;
+    const temp = $('#writeField').contents();
+
+    if (temp[0].nodeName !== 'DIV' && temp[0].nodeName !== 'P') {
+      for (let i = 0; i < select.rangeCount; i += 1) {
+        const oriRange = select.getRangeAt(i);
+        rangeArr.push({
+          sc: oriRange.startContainer,
+          so: oriRange.startOffset,
+          ec: oriRange.endContainer,
+          eo: oriRange.endOffset,
+        });
+      }
+    }
+
+    for (let i = 0; i < select.rangeCount; i += 1) {
+      const range = select.getRangeAt(i);
+      const childList = $('#writeField').contents();
+
+      if (childList[0].nodeName !== 'DIV' && childList[0].nodeName !== 'P') {
+        $('#writeField').contents().wrapAll('<div></div>');
+
+        // restore selection
+        select.removeAllRanges();
+        for (let x = 0; x < rangeArr.length; x += 1) {
+          const restoreRg = document.createRange();
+          restoreRg.setStart(
+            rangeArr[x].sc.nodeName === 'DIV' ? rangeArr[x].sc.firstChild : rangeArr[x].sc,
+            rangeArr[x].so
+          );
+          restoreRg.setEnd(
+            rangeArr[x].ec.nodeName === 'DIV' ? rangeArr[x].ec.firstChild : rangeArr[x].ec,
+            rangeArr[x].eo
+          );
+          select.addRange(restoreRg);
+        }
+        i = -1;
+        continue;
+      } else {
+        const indexs = findSelectIndex(range);
+        if (endIndex === indexs.endIndex) continue;
+        if (endIndex === indexs.startIndex) startIndex = indexs.startIndex + 1;
+        else startIndex = indexs.startIndex;
+        endIndex = indexs.endIndex;
+      }
+
+      for (let j = startIndex; j <= endIndex; j += 1) {
+        if (method === 'indent') {
+          if (value) $(childList[j]).css('margin-left', '+=32');
+          else {
+            $(childList[j]).css('margin-left')[0] !== '0'
+              ? $(childList[j]).css('margin-left', '-=32') : $(childList[j]).css('margin-left', '');
+          }
+        } else $(childList[j]).css('text-align', value);
+      }
+    }
+  }
+
+  function setSize() {
+    fontSizeValue = $(this).css('font-size');
+    $('.sizeVal div').css('border', 'none');
+    $(this).css('border', '1px solid red');
+  }
+
+  function setColor() {
+    const color = $(this).text();
+    if ($(this).parent().parent().attr('id') === 'font') {
+      fontColorValue = color;
+    } else bgColorValue = color;
+    $(this).parents().eq(2).css('background-color', color);
+  }
+
+  function editStyle() {
+    switch ($(this).attr('id')) {
+      case 'imgInsert':
+        insertImgSrc = '';
+        $('.previewImg').css('background-image', 'none');
+        $('#insertImg').attr('value', '');
+        $('#imgUpload').modal('show');
+        break;
+      case 'indent':
+        moveContent('indent', true);
+        break;
+      case 'unIndent':
+        moveContent('indent', false);
+        break;
+      case 'left':
+        moveContent('align', 'left');
+        break;
+      case 'center':
+        moveContent('align', 'center');
+        break;
+      case 'right':
+        moveContent('align', 'right');
+        break;
+      case 'size':
+        if (fontSizeValue) changeStyle('SPAN', 'font-size', fontSizeValue);
+        break;
+      case 'bold':
+        changeStyle('B');
+        break;
+      case 'italic':
+        changeStyle('I');
+        break;
+      case 'underLine':
+        changeStyle('U');
+        break;
+      case 'deleteLine':
+        changeStyle('DEL');
+        break;
+      case 'fontColor':
+        if (fontColorValue) changeStyle('SPAN', 'color', fontColorValue);
+        break;
+      case 'bgColor':
+        if (bgColorValue) changeStyle('SPAN', 'background-color', bgColorValue);
+        break;
+      case 'rmStyle':
+        changeStyle();
+        break;
+      default:
+        break;
+    }
+  }
+
+  function BtnClickStyle(element, c, b, p) {
+    const btn = $(element).parents('.fontStyleBtn');
+    let color;
+    if (element.id === 'fontColor') color = fontColor;
+    else if (element.id === 'bgColor') color = bgColor;
+    else color = c;
+    $(btn).css({
+      'background-color': color,
+      'border': b,
+      'padding': p
+    });
+  }
+
+  function previewImg() {
+    if (this.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        insertImgSrc = e.target.result;
+        $('.previewImg').css({
+          'background-image': `url(${insertImgSrc})`,
+          'background-repeat': 'no-repeat',
+          'background-position': 'center center',
+          'background-size': 'auto 100%'
+        });
+      };
+      reader.readAsDataURL(this.files[0]);
+    }
+  }
+
+  function insertImg() {
+    if (insertImgSrc) {
+      // set insertImg name
+      const now = new Date();
+      const memberName = '#{member.name}';
+      const imgName = `${memberName}-${now.valueOf()}`;
+      $('#imgName').val(imgName);
+
+      const form = $('#insertImgUpload');
+      const formData = new FormData(form.get(0));
+      const route = form.attr('action');
+
+      // upload img inserted in article
+      $.ajax({
+        method: 'POST',
+        type: 'POST',
+        url: route,
+        contentType: false,
+        cache: false,
+        processData: false,
+        data: formData
+      })
+        .done(function (data) {
+          // upload wrong format of img
+          if (!data) {
+            alert('錯誤的圖片格式檔案!!!');
+            return;
+          }
+
+          const insert = document.createElement('img');
+          insert.src = `/publishArticle/insertImg/${imgName}`;
+          $(insert).css({
+            'max-width': '100%',
+            'max-height': '100%',
+          });
+
+          // insert img at the position of caret
+          const select = window.getSelection();
+          const range = select.getRangeAt(0);
+          const content = $('#writeField').contents();
+          const parent = $('#writeField').get(0);
+
+          if (parent.contains(range.startContainer) && parent.contains(range.endContainer)) {
+            range.deleteContents();
+            range.insertNode(insert);
+          } else $('#writeField').append(insert);
+        })
+        .fail(function () {
+          alert('圖片上傳失敗 請重新嘗試!!!');
+        });
+    }
+  }
+
+  if (alreadyStore) {
+    $('#category').val(articleJS.category);
+    $('#writeField').html(articleJS.content);
+  }
+
+  if ($('#emptyAlert').text()) $('#alert').modal('show');
+  $('[data-toggle="tooltip"]').tooltip({ placement: 'top', trigger: 'focus' });
+  $('.sizeVal div').on('click', setSize);
+  $('.colorPlate li').on('click', setColor);
+  $('.fontStyleBtn img').on('click', editStyle);
+  $('.fontStyleBtn img').on('mousedown', function (event) {
+    BtnClickStyle(event.target, '#b3b0ac', '0.2rem inset #aaa7a3', '0.1rem');
+  });
+  $('.fontStyleBtn img').on('mouseup', function (event) {
+    BtnClickStyle(event.target, '', '0.3rem outset #cac9c7', '');
+  });
+  $('#insertImg').on('change', previewImg);
+  $('#insertComfirm').on('click', insertImg);
+});

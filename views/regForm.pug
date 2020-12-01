@@ -2,7 +2,8 @@ extends layout
 
 block main
   .regBackPic
-    - const url = `?_csrf=${csrfToken}`
+    - const encode = encodeURIComponent(csrfToken);
+    - const url = `?_csrf=${encode}`
     form.d-flex.flex-column.mt-5.mx-5(
       name="userData"
       action=url
@@ -10,7 +11,6 @@ block main
       enctype="multipart/form-data" 
       id="userData"
     )
-      //- input(type='hidden' name='_csrf' value=`${csrfToken}`)
       fieldset.mb-1
         legend#iconTitle 📂  貓員頭像
         .profilePic#picBlock.mt-5
@@ -99,31 +99,6 @@ block main
               | 喔!!
         .modal-footer
           button.btn.btn-primary(type='button' data-dismiss='modal') Close
-  script.
-    $(document).ready(function(){
-      $("#notice").modal("show");
-      // input欄位mask設置(排除規則外字符輸入)
-      $('#name').inputmask({"mask": "*{5,10}"});
-      $('#pwd').inputmask({"mask": "*{0,30}"});
-      $('#confirmPwd').inputmask({"mask": "*{0,30}"});
-
-      // 顯示欄位提示
-      $('#picLabel').tooltip({placement: "right", trigger: "hover"});
-      $('[data-toggle="tooltip"]').tooltip({placement: "right", trigger: "focus"});
-
-      if (!$('#confirmPwd').val()) {
-        $('#confirmPwd').prop('disabled', 'true');
-        $('#confTitle').toggleClass('disableField');
-      }
-
-      for (let i = 1; i < $(':required').length; i += 1) {
-        if ($(':required').eq(i).val()) $(':required').eq(i).addClass('modified');
-      }
-
-      // input第一次觸發事件時加入class
-      $(':required').one('blur', function() {
-        if (!$(this).hasClass('modified')) $(this).addClass('modified');
-      });
-      $('#pwd').on('blur', unlockCPW);
-      $("#confirmPwd").on('focus', setCpwPattern);
-    });
+  script
+    include ../public/javascripts/regHandler.js
+    

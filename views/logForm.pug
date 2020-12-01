@@ -22,9 +22,5 @@ block main
         a.btn.btn-primary.mr-3.mb-1(href='/register') 註冊
         a.btn.btn-danger.mr-3.mb-1(href='/resetPwd') 忘記密碼
         button.btn.btn-success.mb-1(type='submit') 登入
-  script.
-    $(document).ready(function(){
-      // input欄位mask設置(排除規則外字符輸入)
-      $('#username').inputmask({"mask": "*{5,10}"});
-      $('#password').inputmask({"mask": "*{0,30}"});
-    });
+  script
+    include ../public/javascripts/logHandler.js

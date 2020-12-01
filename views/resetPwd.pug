@@ -21,11 +21,10 @@ block main
           required
         )
       .form-group.mb-3.text-right
-        button.btn.btn-success.mb-1(type='submit') 送出
-  script.
-    $(document).ready(function(){
-      // input欄位mask設置(排除規則外字符輸入)
-      $('#name').inputmask({"mask": "*{5,10}"});
-      // 顯示欄位提示
-      $('[data-toggle="tooltip"]').tooltip({placement: "right", trigger: "hover focus"});
-    });
+        button.btn.btn-success.mb-1#resetPwdReq(type='submit') 送出
+  #screenMask
+    .d-flex.justify-content-center.align-items-center(style='height:100%;')
+      span.spinner-border.text-primary(style='width:4rem;height:4rem;')
+      span.display-1#loadingMsg  需求處理中.....請稍後
+  script
+    include ../public/javascripts/resetPwdHandler.js

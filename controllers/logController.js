@@ -219,7 +219,7 @@ exports.resetFormPost = [
             // send email with link which has permission
             await mailSender.sendMail({
               to: target.email,
-              from: process.env.MAIL_ACCOUNT,
+              from: `TangTangsWebSite <${process.env.MAIL_ACCOUNT}>`,
               subject: "重設帳戶密碼-TangTang's record",
               html: `
                 <h3>Hello ${target.name}</h3>
