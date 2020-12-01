@@ -88,9 +88,9 @@ nodemailer | Send an email with authorized link to user who forgot own password
   
   ##### ✂ &nbsp; delete photo
   Only members can delete photo.\
-  🔶 The steps for deleting photos:
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; First, click scissors icon to cut out the photo.
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Second, click garbage can button to delete the photo.
+  🔶 The steps for deleting photos:\
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; First, click scissors icon to cut out the photo.\
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Second, click garbage can button to delete the photo.\
   ⚠️ **Scissors icon is displayed only when the publisher has been logged in**.\
   💠 *display operation*\
   ![function: delete photo](https://i.imgur.com/77EAlFS.gif)
