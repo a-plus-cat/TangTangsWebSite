@@ -745,7 +745,6 @@ $(document).ready(function () {
     if (insertImgSrc) {
       // set insertImg name
       const now = new Date();
-      const memberName = '#{member.name}';
       const imgName = `${memberName}-${now.valueOf()}`;
       $('#imgName').val(imgName);
 
